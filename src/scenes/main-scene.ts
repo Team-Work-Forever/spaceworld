@@ -1,21 +1,24 @@
 import Phaser from "phaser";
 import { Asteroid } from "../gameObjects/asteroids/asteroid";
+import AsteroidGroup from "../gameObjects/asteroids/asteroid-group";
 import BlueAsteroid from "../gameObjects/asteroids/asteroids/blue-asteroid";
 import PurpleAsteroid from "../gameObjects/asteroids/asteroids/purple-asteroid";
 import YellowAsteroid from "../gameObjects/asteroids/asteroids/yellow-asteroid";
 import ItemGroup from "../gameObjects/items/item-group";
+import Laser from "../gameObjects/layser/laser";
 import Player from "../gameObjects/player";
 
 export default class MainScene extends Phaser.Scene {
 
-    private _player: Player
-    private _itemGroup: ItemGroup
+    private _player: Player;
+    public _itemGroup: ItemGroup;
+    private _asteroidGroup: AsteroidGroup;
     private timer: any;
 
     preload() {
 
-        this.load.image('background', '../assets/background.png')
-        this.load.image('bullet', '../assets/bullet.png')
+        this.load.image('background', '../assets/background.png');
+        this.load.image('bullet', '../assets/bullet.png');
         this.load.spritesheet('item', '../../assets/item.png', { frameWidth: 23.27, frameHeight: 40 });
         this.load.spritesheet('items', '../../assets/items-menu.png', { frameWidth: 57, frameHeight: 98 });
         this.load.spritesheet('blue_asteroid', '../../assets/blue_asteroid.png', { frameWidth: 101.98, frameHeight: 100 });
@@ -28,9 +31,10 @@ export default class MainScene extends Phaser.Scene {
     create() {
 
         const { width, height } = this.scale;
-        this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0).setScrollFactor(0, 0)
+        this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0).setScrollFactor(0, 0);
 
         this._itemGroup = new ItemGroup(this, 10);
+        this._asteroidGroup = new AsteroidGroup(this, 100);
 
         this._player = new Player(this, 200, this.input.mousePointer.y);
 
@@ -46,21 +50,51 @@ export default class MainScene extends Phaser.Scene {
         // Collisions
 
         this.physics.add.overlap(this._player, this._itemGroup, (_, item) => {
-            item.destroy()
-        }, null)
+            item.destroy();
+        }, null);
+
+        this.physics.add.overlap(this._player, this._asteroidGroup, (_, astoroid: Asteroid) => {
+
+            // TODO: Não mostra a animação
+            astoroid.play('explode-' + astoroid.sprite)
+            astoroid.destroy();
+
+            // player leva dano
+            // player perde vida
+
+        }, null);
+
+        this.physics.add.overlap(this._player, this._asteroidGroup, (_, astoroid: Asteroid) => {
+
+            // TODO: Não mostra a animação
+            astoroid.play('explode-' + astoroid.sprite)
+            astoroid.destroy();
+
+            // player leva dano
+            // player perde vida
+
+        }, null);
+
+        this.physics.add.overlap(this._player.laser_group, this._asteroidGroup, (laser: Laser, astoroid: Asteroid) => {
+
+            // TODO: Não mostra a animação
+            astoroid.play('explode-' + astoroid.sprite)
+            astoroid.destroy();
+            laser.destroy();
+
+            // player leva dano
+            // player perde vida
+
+        }, null);
 
     }
 
-    scrollBackground() {
-
-
-
-    }
+    scrollBackground() { }
 
     activateAsteroid(asteroid: Asteroid) {
-        asteroid.setActive(true)
-        asteroid.setActive(true)
-        asteroid.play('spin')
+        asteroid.setActive(true);
+        asteroid.setActive(true);
+        asteroid.play('spin');
     }
 
     spawnAsteroids() {
@@ -70,19 +104,23 @@ export default class MainScene extends Phaser.Scene {
         var scale = Phaser.Math.Between(0.2, 1);
         var object: Asteroid;
 
+        // Melhorar isto!
         switch (objectType) {
             case 1:
-                object = new BlueAsteroid(this, window.innerWidth + 50, randomY)
+                object = new BlueAsteroid(this, window.innerWidth + 50, randomY);
                 break;
             case 2:
-                object = new YellowAsteroid(this, window.innerWidth + 50, randomY)
+                object = new YellowAsteroid(this, window.innerWidth + 50, randomY);
                 break;
             case 3:
-                object = new PurpleAsteroid(this, window.innerWidth + 50, randomY)
+                object = new PurpleAsteroid(this, window.innerWidth + 50, randomY);
                 break;
         }
 
-        object.play("spin-" + object.sprite)
+        // Adiciona na lista de asteroides para que as colisões funceminem
+        this._asteroidGroup.add(object);
+
+        object.play("spin-" + object.sprite);
         object.setScale(scale);
         object.setGravityX(-100);
         object.body.velocity.y = 10;
@@ -96,11 +134,9 @@ export default class MainScene extends Phaser.Scene {
 
         this._player.update();
 
-        // this._itemGroup.showItems(100, 100);
-
-        // this._itemGroup.children.each((item) => {
-        //     this.physics.moveToObject(item, this._player.player_tile, 500);
-        // });
+        this._itemGroup.children.each((item) => {
+            this.physics.moveToObject(item, this._player.player_tile, 500);
+        });
 
     }
 }

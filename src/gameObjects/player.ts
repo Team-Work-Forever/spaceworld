@@ -9,14 +9,14 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     private x: number
     private y: number
 
-    private weapon_x: number = 5;
-    private weapon_y: number = 65;
+    private _weapon_x: number = 5;
+    private _weapon_y: number = 65;
 
     declare body: Phaser.Physics.Arcade.Body;
 
     private player: Phaser.Physics.Arcade.Sprite;
-    private weapon: Phaser.Physics.Arcade.Sprite;
-    private layser_group: LayserGroup;
+    private _weapon: Phaser.Physics.Arcade.Sprite;
+    private _layser_group: LayserGroup;
 
     constructor(scene: MainScene, x: number, y: number) {
 
@@ -24,33 +24,33 @@ export default class Player extends Phaser.Physics.Arcade.Group {
             collideWorldBounds: true,
         });
 
-        this.layser_group = new LayserGroup(scene);
+        this._layser_group = new LayserGroup(scene);
 
         this.x = x;
         this.y = y;
 
         this.addPlayer();
-        this.attachWeapon();
-        this.setAnimations();
+        this.attach_weapon();
+        this.set_animations();
 
         this.add(this.player);
-        this.add(this.weapon);
+        this.add(this._weapon);
 
-        this.setEvents()
+        this.set_events()
 
         this.scene.add.existing(this);
 
     }
 
-    setEvents() {
+    set_events() {
 
         this.scene.input.on('pointermove', pointer => {
             this.player.setY(pointer.y)
-            this.weapon.setY(pointer.y + this.weapon_y)
+            this._weapon.setY(pointer.y + this._weapon_y)
         })
 
         this.scene.input.on('pointerdown', () => {
-            this.shotLayers();
+            this.shotLasers();
         })
 
     }
@@ -61,10 +61,10 @@ export default class Player extends Phaser.Physics.Arcade.Group {
         this.player.setCollideWorldBounds(true);
     }
 
-    attachWeapon() {
-        this.weapon = this.scene.physics.add.sprite(this.x + this.weapon_x, this.y + this.weapon_y, 'weapon');
-        this.scene.physics.world.enableBody(this.weapon);
-        this.weapon.setCollideWorldBounds(true);
+    attach_weapon() {
+        this._weapon = this.scene.physics.add.sprite(this.x + this._weapon_x, this.y + this._weapon_y, 'weapon');
+        this.scene.physics.world.enableBody(this._weapon);
+        this._weapon.setCollideWorldBounds(true);
     }
 
     setDefault() {
@@ -79,7 +79,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
         this.setVelocityY(this.velocity);
     }
 
-    setAnimations() {
+    set_animations() {
 
         // Idle animation
         this.scene.anims.create({
@@ -111,8 +111,8 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
     }
 
-    shotLayers() {
-        this.layser_group.fireLayser(this.player.x + this.weapon_x + 145, this.player.y + this.weapon_y - 1);
+    shotLasers() {
+        this._layser_group.fireLayser(this.player.x + this._weapon_x + 145, this.player.y + this._weapon_y - 1);
     }
 
     update() {
@@ -123,5 +123,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
         return this.player;
     }
 
-
+    get laser_group() {
+        return this._layser_group;
+    }
 }

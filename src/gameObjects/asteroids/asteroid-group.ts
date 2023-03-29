@@ -8,7 +8,7 @@ export default class AsteroidGroup extends Phaser.Physics.Arcade.Group {
 
         this.createMultiple({
             classType: Asteroid,
-            frameQuantity: qty_asteroids,
+            max: qty_asteroids,
             active: false,
             visible: false,
             key: 'asteroid'

@@ -6,7 +6,6 @@ export default class LayserGroup extends Phaser.Physics.Arcade.Group {
 
         this.createMultiple({
             classType: Laser,
-            frameQuantity: 150,
             active: false,
             visible: false,
             key: 'bullet'
@@ -16,7 +15,7 @@ export default class LayserGroup extends Phaser.Physics.Arcade.Group {
 
     fireLayser(x: number, y: number) {
 
-        const layser = this.getFirstDead(false) as Laser;
+        const layser = this.create();
 
         if (layser) {
             layser.fire(x, y)
