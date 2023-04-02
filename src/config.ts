@@ -1,4 +1,4 @@
-import MainScene from './scenes/main-scene';
+import { MainScene, HudScene } from './scenes';
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
     type: Phaser.WEBGL,
@@ -9,7 +9,7 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
     scale: {
         mode: Phaser.Scale.FIT,
     },
-    scene: [MainScene],
+    scene: [MainScene, HudScene],
     input: {
         keyboard: true,
     },

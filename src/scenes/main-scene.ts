@@ -7,14 +7,20 @@ import {
 import ItemGroup from '../gameObjects/items/item-group';
 import Laser from '../gameObjects/laser/laser';
 import Player from '../gameObjects/player';
+import Item from '../gameObjects/items/item';
 
 export default class MainScene extends Phaser.Scene {
+    constructor() {
+        super('main-scene');
+    }
+
     private _speed: number = -200;
     private _level: number = 1;
     private _player: Player;
     public _itemGroup: ItemGroup;
     private _asteroidGroup: AsteroidGroup;
     private timer: any;
+    private _background: Phaser.GameObjects.TileSprite;
 
     private _info_text: GameObjects.Text;
 
@@ -58,10 +64,14 @@ export default class MainScene extends Phaser.Scene {
 
     create() {
         const { width, height } = this.scale;
-        this.add
+
+        // Run UI
+        this.scene.run('ui');
+
+        this._background = this.add
             .tileSprite(0, 0, width, height, 'background')
-            .setOrigin(0, 0)
-            .setScrollFactor(0, 0);
+            .setOrigin(0);
+        //.setScrollFactor(0, 0)
 
         this._itemGroup = new ItemGroup(this, 10);
         this._asteroidGroup = new AsteroidGroup(this, 100);
@@ -80,6 +90,25 @@ export default class MainScene extends Phaser.Scene {
         this._info_text = this.add.text(0, 0, 'SLB OLÉÉÉÉ OLÉÉÉÉ OLÉÉÉÉ', {
             color: '#00ff00',
         });
+
+        this.tweens.add({
+            targets: this._itemGroup,
+            angle: 360,
+            duration: 500,
+            onUpdate: (tweens) => {
+                tweens.getValue();
+            },
+        });
+
+        // this.tweens.addCounter({
+        //     from: 0,
+        //     to: 360,
+        //     duration: 5000,
+        //     repeat: -1,
+        //     onUpdate: function (tween) {
+        //         this._asteroid_factory.setAngle(tween.getValue());
+        //     },
+        // });
 
         // Collisions
 
@@ -144,19 +173,19 @@ export default class MainScene extends Phaser.Scene {
         switch (objectType) {
             case 1:
                 object = this._asteroid_factory.createBlueAsteroid(
-                    window.innerWidth + 50,
+                    window.innerWidth + 150,
                     randomY,
                 );
                 break;
             case 2:
                 object = this._asteroid_factory.createYellowAsteroid(
-                    window.innerWidth + 50,
+                    window.innerWidth + 150,
                     randomY,
                 );
                 break;
             case 3:
                 object = this._asteroid_factory.createPurpleAsteroid(
-                    window.innerWidth + 50,
+                    window.innerWidth + 150,
                     randomY,
                 );
                 break;
@@ -174,13 +203,15 @@ export default class MainScene extends Phaser.Scene {
         this.timer.paused = false;
     }
 
-    update(): void {
-        // update player
+    update(time, delta): void {
+        var x = 0.5;
+        this._background.tilePositionX += x;
+
         this._player.update();
 
         // Recolher items
-        this._itemGroup.children.each((item) => {
-            this.physics.moveToObject(item, this._player.player_tile, 500);
+        this._itemGroup.children.each((item: Item) => {
+            this.physics.moveToObject(item, this._player.player_tile, 1000);
         });
 
         this._info_text.setText([
