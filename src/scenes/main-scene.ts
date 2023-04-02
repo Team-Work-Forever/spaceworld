@@ -71,9 +71,10 @@ export default class MainScene extends Phaser.Scene {
         this._background = this.add
             .tileSprite(0, 0, width, height, 'background')
             .setOrigin(0);
-        //.setScrollFactor(0, 0)
 
         this._itemGroup = new ItemGroup(this, 10);
+        this._itemGroup.clear(true, true);
+
         this._asteroidGroup = new AsteroidGroup(this, 100);
 
         this._player = new Player(this, 200, this.input.mousePointer.y);
@@ -87,40 +88,23 @@ export default class MainScene extends Phaser.Scene {
         });
 
         // UI
-        this._info_text = this.add.text(0, 0, 'SLB OLÉÉÉÉ OLÉÉÉÉ OLÉÉÉÉ', {
+        this._info_text = this.add.text(0, 0, 'itemType OLÉÉÉÉ OLÉÉÉÉ OLÉÉÉÉ', {
             color: '#00ff00',
         });
 
-        this.tweens.add({
-            targets: this._itemGroup,
-            angle: 360,
-            duration: 500,
-            onUpdate: (tweens) => {
-                tweens.getValue();
-            },
-        });
-
-        // this.tweens.addCounter({
-        //     from: 0,
-        //     to: 360,
-        //     duration: 5000,
-        //     repeat: -1,
-        //     onUpdate: function (tween) {
-        //         this._asteroid_factory.setAngle(tween.getValue());
-        //     },
-        // });
-
         // Collisions
 
+        // Apanha o item
         this.physics.add.overlap(
             this._player,
             this._itemGroup,
-            (_, item) => {
-                try {
-                    item.destroy();
-                } catch (error) {
-                    console.log(error);
-                }
+            (_, item: Item) => {
+                item.destroy();
+
+                // Adiciona Pontos no Item correto
+                console.log(item.itemType);
+
+                this.events.emit('addScore', item.itemType);
             },
             null,
         );
@@ -153,14 +137,6 @@ export default class MainScene extends Phaser.Scene {
             },
             null,
         );
-    }
-
-    scrollBackground() {}
-
-    activateAsteroid(asteroid: Asteroid) {
-        asteroid.setActive(true);
-        asteroid.setActive(true);
-        asteroid.play('spin');
     }
 
     spawnAsteroids() {
@@ -203,7 +179,7 @@ export default class MainScene extends Phaser.Scene {
         this.timer.paused = false;
     }
 
-    update(time, delta): void {
+    update(): void {
         var x = 0.5;
         this._background.tilePositionX += x;
 

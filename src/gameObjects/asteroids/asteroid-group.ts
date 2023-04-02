@@ -7,7 +7,6 @@ export default class AsteroidGroup extends Phaser.Physics.Arcade.Group {
             maxSize: qty_asteroids,
             active: false,
             visible: false,
-            key: 'bullet',
         });
     }
 }

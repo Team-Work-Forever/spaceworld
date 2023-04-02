@@ -1,6 +1,8 @@
 import { ItemType } from '../gameObjects/items/item-type';
 
 export default class CrystalContainer extends Phaser.GameObjects.Container {
+    private _score: Phaser.GameObjects.Text;
+
     constructor(scene: Phaser.Scene, x: number, y: number, itemType: ItemType) {
         super(scene);
 
@@ -9,8 +11,8 @@ export default class CrystalContainer extends Phaser.GameObjects.Container {
 
         const panel = scene.add.image(0, 0, 'overlap-item');
 
-        const score = scene.add
-            .text(0, 0, '10', {
+        this._score = scene.add
+            .text(0, 0, '0', {
                 fontFamily: 'Days One',
                 fontSize: '20px',
             })
@@ -20,7 +22,12 @@ export default class CrystalContainer extends Phaser.GameObjects.Container {
             .setOrigin(-1, 0.5);
 
         this.add(panel);
-        this.add(score);
+        this.add(this._score);
         this.add(icon);
+    }
+
+    public increment(qty: number) {
+        const sum = parseInt(this._score.text) + qty;
+        this._score.setText(sum.toString());
     }
 }

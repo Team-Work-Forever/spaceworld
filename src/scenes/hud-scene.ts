@@ -1,4 +1,5 @@
 import { DisplayMenu } from '../components';
+import { ItemType } from '../gameObjects/items/item-type';
 
 export default class HudScene extends Phaser.Scene {
     private displayMenu: DisplayMenu;
@@ -28,6 +29,12 @@ export default class HudScene extends Phaser.Scene {
 
     create() {
         this.displayMenu = new DisplayMenu(this);
-        console.log('SLB!');
+        let game_scene: Phaser.Scene = this.scene.get('main-scene');
+
+        game_scene.events.on('addScore', this.add_points, this);
+    }
+
+    add_points(itemType: ItemType) {
+        this.displayMenu.increaseScore(itemType);
     }
 }

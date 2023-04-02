@@ -4,6 +4,7 @@ import EnergyBar from './energy-bar';
 import { HeartBar } from './heart-ui';
 
 export default class DisplayMenu {
+    private _point_to_gain: number = 1;
     private _gap: number = 130;
     private right_container!: Phaser.GameObjects.Container;
     private left_container!: Phaser.GameObjects.Container;
@@ -63,8 +64,14 @@ export default class DisplayMenu {
             ItemType.PURPLE,
         );
 
-        this.right_container.add(blue_crystal);
         this.right_container.add(yellow_crystal);
         this.right_container.add(purple_crystal);
+        this.right_container.add(blue_crystal);
+    }
+
+    public increaseScore(itemType: ItemType) {
+        (this.right_container.getAt(itemType) as CrystalContainer).increment(
+            this._point_to_gain,
+        );
     }
 }
