@@ -6,6 +6,8 @@ import { player_initial_lifes } from '../config';
 import game from '../game';
 
 export default class Player extends Phaser.Physics.Arcade.Group {
+    private _is_hit: boolean = false;
+
     private _mouse_gap: number = 150;
     private scale: number = 80;
     private max_lifes: number = player_initial_lifes;
@@ -134,10 +136,24 @@ export default class Player extends Phaser.Physics.Arcade.Group {
         }
     }
 
-    update(): void {
-        this.player.anims.play('move', true);
+    public preUpdate(): void {
+        if (!this.is_hited) {
+            this.player.anims.play('move', true);
+        } else {
+            this.player.play('hit');
 
-        if (this._lifes < this.max_lifes) console.log('Lixou-se');
+            this.scene.time.addEvent({
+                delay: 150,
+                callback: () => {
+                    this.is_hited = false;
+                },
+            });
+        }
+
+        if (this.lifes <= 0) {
+            this.player.play('destroy');
+            game.scene.pause('main-scene');
+        }
     }
 
     get player_tile() {
@@ -148,7 +164,15 @@ export default class Player extends Phaser.Physics.Arcade.Group {
         return this._laser_group;
     }
 
-    get lifes() {
+    get lifes(): number {
         return this._lifes;
+    }
+
+    set is_hited(is_hited: boolean) {
+        this._is_hit = is_hited;
+    }
+
+    get is_hited() {
+        return this._is_hit;
     }
 }

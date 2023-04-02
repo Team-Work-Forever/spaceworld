@@ -115,6 +115,7 @@ export default class MainScene extends Phaser.Scene {
                 // player leva dano
                 this._player.take_damage();
                 this.events.emit('hitPlayer', this._player.lifes);
+                this._player.is_hited = true;
             },
             null,
         );
@@ -175,16 +176,12 @@ export default class MainScene extends Phaser.Scene {
         var x = 0.5;
         this._background.tilePositionX += x;
 
-        this._player.update();
-
         // Recolher items
         this._itemGroup.children.each((item: Item) => {
             this.physics.moveToObject(item, this._player.player_tile, 1000);
         });
 
         this._info_text.setText([
-            'Lifes:',
-            this._player.lifes.toString(),
             'Used: ',
             this._player.laser_group.getTotalUsed().toString(),
             'Free: ',

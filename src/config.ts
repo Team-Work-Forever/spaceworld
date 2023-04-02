@@ -21,3 +21,4 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
 };
 
 export const player_initial_lifes = 4;
+export const is_playing = true;
