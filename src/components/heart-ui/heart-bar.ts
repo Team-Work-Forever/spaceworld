@@ -42,7 +42,3 @@ export default class HeartBar extends Phaser.GameObjects.Container {
         );
     }
 }
-
-// 2 - 0;
-// 2 - 1;
-// 2 - 2;

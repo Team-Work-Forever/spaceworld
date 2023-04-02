@@ -3,8 +3,10 @@ import MainScene from '../scenes/main-scene';
 import LaserGroup from './laser/laser-group';
 import Laser from './laser/laser';
 import { player_initial_lifes } from '../config';
+import game from '../game';
 
 export default class Player extends Phaser.Physics.Arcade.Group {
+    private _mouse_gap: number = 150;
     private scale: number = 80;
     private max_lifes: number = player_initial_lifes;
     private _lifes: number = this.max_lifes;
@@ -45,8 +47,15 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
     set_events() {
         this.scene.input.on('pointermove', (pointer) => {
-            this.player.setY(pointer.y);
-            this._weapon.setY(pointer.y + this._weapon_y);
+            if (
+                pointer.y <
+                    parseInt(game.config.height.toString()) - this._mouse_gap &&
+                pointer.y > this._mouse_gap
+            ) {
+                this.player.setY(pointer.y);
+                this._weapon.setY(pointer.y + this._weapon_y);
+            } else {
+            }
         });
 
         this.scene.input.on('pointerdown', () => {
