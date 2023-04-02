@@ -1,3 +1,4 @@
+import { player_initial_lifes } from '../../config';
 import { HeartType } from './heart';
 
 export default class HeartBar extends Phaser.GameObjects.Container {
@@ -7,24 +8,33 @@ export default class HeartBar extends Phaser.GameObjects.Container {
     constructor(scene: Phaser.Scene) {
         super(scene);
 
-        let count: number = 0;
-
         // Define group
         this._heart_group = scene.physics.add.group({
-            maxSize: 10,
+            maxSize: player_initial_lifes,
             key: 'heart',
         });
 
         // Define 3 corações
         this._heart_group.createMultiple({
-            frameQuantity: 2,
+            frameQuantity: player_initial_lifes - 1,
             key: 'heart',
         });
+
+        this.draw(player_initial_lifes);
+    }
+
+    public draw(lifes: number) {
+        let count: number = 0;
 
         this._heart_group.children.each(
             (heart: Phaser.Physics.Arcade.Sprite) => {
                 heart.setPosition(count, 0);
-                heart.setFrame(HeartType.UNBROKEN);
+
+                if (lifes >= count / this._grap) {
+                    heart.setFrame(HeartType.UNBROKEN);
+                } else {
+                    heart.setFrame(HeartType.BROKEN);
+                }
 
                 this.add(heart);
                 count += this._grap;
@@ -32,3 +42,7 @@ export default class HeartBar extends Phaser.GameObjects.Container {
         );
     }
 }
+
+// 2 - 0;
+// 2 - 1;
+// 2 - 2;

@@ -2,10 +2,11 @@ import Phaser from 'phaser';
 import MainScene from '../scenes/main-scene';
 import LaserGroup from './laser/laser-group';
 import Laser from './laser/laser';
+import { player_initial_lifes } from '../config';
 
 export default class Player extends Phaser.Physics.Arcade.Group {
     private scale: number = 80;
-    private max_lifes: number = 3;
+    private max_lifes: number = player_initial_lifes;
     private _lifes: number = this.max_lifes;
 
     private x: number;

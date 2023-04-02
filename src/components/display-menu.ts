@@ -67,6 +67,12 @@ export default class DisplayMenu {
         this.right_container.add(blue_crystal);
     }
 
+    public decreaseLife(lifes: number) {
+        const health_bar = this.left_container.getAt(0) as HeartBar;
+        lifes -= 1;
+        health_bar.draw(lifes);
+    }
+
     public increaseScore(itemType: ItemType) {
         (this.right_container.getAt(itemType) as CrystalContainer).increment(
             this._point_to_gain,

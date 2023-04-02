@@ -105,29 +105,25 @@ export default class MainScene extends Phaser.Scene {
             null,
         );
 
+        // Player colide com os asteroides
         this.physics.add.overlap(
             this._player,
             this._asteroidGroup,
             (_, astoroid: Asteroid) => {
-                // TODO: Não mostra a animação
-                astoroid.play('explode-' + astoroid.sprite);
                 astoroid.destroyAndCollect();
 
                 // player leva dano
-                // player perde vida
                 this._player.take_damage();
+                this.events.emit('hitPlayer', this._player.lifes);
             },
             null,
         );
 
+        // Laser colide com asteroid
         this.physics.add.overlap(
             this._player.laser_group,
             this._asteroidGroup,
             (laser: Laser, astoroid: Asteroid) => {
-                // TODO: Não mostra a animação - Nem a encontra
-                astoroid.play('explode-' + astoroid.sprite);
-
-                // TODO: Alteramos isto!
                 astoroid.destroyAndCollect();
                 laser.destroy();
             },

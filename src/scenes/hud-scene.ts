@@ -32,6 +32,11 @@ export default class HudScene extends Phaser.Scene {
         let game_scene: Phaser.Scene = this.scene.get('main-scene');
 
         game_scene.events.on('addScore', this.add_points, this);
+        game_scene.events.on('hitPlayer', this.hitPlayer, this);
+    }
+
+    hitPlayer(lifes: number) {
+        this.displayMenu.decreaseLife(lifes);
     }
 
     add_points(itemType: ItemType) {

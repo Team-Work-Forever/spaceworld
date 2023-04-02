@@ -39,6 +39,7 @@ export class Asteroid extends Phaser.Physics.Arcade.Sprite {
         this.setFrictionX(20);
         this.scene._asteroidGroup.remove(this);
 
+        // Spawn o cristal
         this.scene._itemGroup.add(
             new Item(this.scene, this.x, this.y, this._itemType),
         );

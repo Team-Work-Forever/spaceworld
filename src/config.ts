@@ -19,3 +19,5 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
     backgroundColor: '#000000',
     render: { pixelArt: false, antialias: true },
 };
+
+export const player_initial_lifes = 4;
