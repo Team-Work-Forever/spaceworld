@@ -32,11 +32,20 @@ export class Asteroid extends Phaser.Physics.Arcade.Sprite {
     protected setExplode(): void {}
 
     // TODO: Drop Item
-    override destroy(fromScene?: boolean): void {
+    destroyAndCollect(): void {
         this.scene._itemGroup.add(
             new Item(this.scene, this.x, this.y, this._itemType),
         );
-        super.destroy(fromScene);
+        this.destroy();
+    }
+
+    protected preUpdate(time, delta): void {
+        super.preUpdate(time, delta);
+
+        if (this.x <= 0) {
+            this.destroy();
+            console.log('Destruction');
+        }
     }
 
     get sprite() {

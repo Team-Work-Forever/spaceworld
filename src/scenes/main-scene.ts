@@ -115,7 +115,7 @@ export default class MainScene extends Phaser.Scene {
             (_, astoroid: Asteroid) => {
                 // TODO: Não mostra a animação
                 astoroid.play('explode-' + astoroid.sprite);
-                astoroid.destroy();
+                astoroid.destroyAndCollect();
 
                 // player leva dano
                 // player perde vida
@@ -132,7 +132,7 @@ export default class MainScene extends Phaser.Scene {
                 astoroid.play('explode-' + astoroid.sprite);
 
                 // TODO: Alteramos isto!
-                astoroid.destroy();
+                astoroid.destroyAndCollect();
                 laser.destroy();
             },
             null,
