@@ -7,6 +7,7 @@ export class Asteroid extends Phaser.Physics.Arcade.Sprite {
     declare scene: MainScene;
     private _sprite: string;
     private _itemType: ItemType;
+    private _isDestroied: boolean = false;
 
     constructor(
         scene: MainScene,
@@ -33,18 +34,27 @@ export class Asteroid extends Phaser.Physics.Arcade.Sprite {
 
     // TODO: Drop Item
     destroyAndCollect(): void {
+        this.play('explode-' + this.sprite);
+
+        this.setFrictionX(20);
+        this.scene._asteroidGroup.remove(this);
+
         this.scene._itemGroup.add(
             new Item(this.scene, this.x, this.y, this._itemType),
         );
-        this.destroy();
+
+        this._isDestroied = true;
     }
 
     protected preUpdate(time, delta): void {
         super.preUpdate(time, delta);
 
+        if (this._isDestroied) {
+            this.alpha -= 0.005;
+        }
+
         if (this.x <= 0) {
             this.destroy();
-            console.log('Destruction');
         }
     }
 

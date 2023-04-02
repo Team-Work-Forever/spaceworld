@@ -13,8 +13,6 @@ export default class DisplayMenu {
     constructor(scene: Phaser.Scene) {
         const { width, height } = scene.scale;
 
-        console.log(width);
-
         this.left_container = scene.add.container(100, 80);
         this.right_container = scene.add.container(width - 132, 80);
         this.bottom_right_container = scene.add.container(

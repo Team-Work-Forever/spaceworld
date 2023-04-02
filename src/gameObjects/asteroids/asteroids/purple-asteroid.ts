@@ -31,6 +31,7 @@ export default class PurpleAsteroid extends Asteroid {
                 },
             ],
             frameRate: 1,
+            repeat: -1,
         });
     }
 }

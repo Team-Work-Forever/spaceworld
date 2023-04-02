@@ -21,15 +21,17 @@ export default class YellowAsteroid extends Asteroid {
         });
     }
 
-    // protected setExplode(): void {
-    //     this.setFrame(this.anims.get(this.scene.anims.name).frames[6].textureFrame)
-    //     this.scene.anims.create({
-    //         key: 'explode' + '-' + sprite,
-    //         frames: [{
-    //             key: sprite,
-    //             frame: 6
-    //         }],
-    //         frameRate: 1
-    //     });
-    // }
+    protected setExplode(): void {
+        this.scene.anims.create({
+            key: 'explode' + '-' + sprite,
+            frames: [
+                {
+                    key: sprite,
+                    frame: 6,
+                },
+            ],
+            frameRate: 1,
+            repeat: -1,
+        });
+    }
 }

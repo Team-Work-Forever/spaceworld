@@ -18,7 +18,7 @@ export default class MainScene extends Phaser.Scene {
     private _level: number = 1;
     private _player: Player;
     public _itemGroup: ItemGroup;
-    private _asteroidGroup: AsteroidGroup;
+    public _asteroidGroup: AsteroidGroup;
     private timer: any;
     private _background: Phaser.GameObjects.TileSprite;
 
@@ -100,10 +100,6 @@ export default class MainScene extends Phaser.Scene {
             this._itemGroup,
             (_, item: Item) => {
                 item.destroy();
-
-                // Adiciona Pontos no Item correto
-                console.log(item.itemType);
-
                 this.events.emit('addScore', item.itemType);
             },
             null,

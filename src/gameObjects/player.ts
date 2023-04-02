@@ -127,7 +127,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     update(): void {
         this.player.anims.play('move', true);
 
-        if (this._lifes < this.max_lifes) console.log('Fodeu-se');
+        if (this._lifes < this.max_lifes) console.log('Lixou-se');
     }
 
     get player_tile() {
