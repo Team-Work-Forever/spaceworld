@@ -1,7 +1,7 @@
 import MainScene from "./scenes/main-scene";
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
-    type: Phaser.AUTO,
+    type: Phaser.WEBGL,
     title: 'Template',
     width: window.innerWidth,
     height: window.innerHeight,

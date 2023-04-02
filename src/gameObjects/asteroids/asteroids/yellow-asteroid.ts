@@ -1,4 +1,4 @@
-import { Scene } from "phaser";
+import MainScene from "../../../scenes/main-scene";
 import { ItemType } from "../../items/item-type";
 import { Asteroid } from "../asteroid";
 
@@ -6,7 +6,7 @@ var sprite: string = 'yellow_asteroid'
 
 export default class YellowAsteroid extends Asteroid {
 
-    constructor(scene: Scene, x: number, y: number) {
+    constructor(scene: MainScene, x: number, y: number) {
         super(scene, x, y, sprite, ItemType.YELLOW);
     }
 
@@ -21,16 +21,15 @@ export default class YellowAsteroid extends Asteroid {
         });
     }
 
-    protected setExplode(): void {
-        this.scene.anims.create({
-            key: 'explode' + '-' + sprite,
-            frames: [{
-                key: sprite,
-                frame: 6
-            }],
-            frameRate: 10,
-            repeat: -1
-        });
-    }
-
+    // protected setExplode(): void {
+    //     this.setFrame(this.anims.get(this.scene.anims.name).frames[6].textureFrame)        
+    //     this.scene.anims.create({
+    //         key: 'explode' + '-' + sprite,
+    //         frames: [{
+    //             key: sprite,
+    //             frame: 6
+    //         }],
+    //         frameRate: 1
+    //     });
+    // }
 }

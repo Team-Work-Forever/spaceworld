@@ -12,7 +12,7 @@ export class Game extends Phaser.Game {
 var game: Phaser.Game;
 
 window.addEventListener('load', () => {
-    game = new Phaser.Game(GameConfig);
+    //game = new Phaser.Game(GameConfig);
 })
 
-export default game;
+export default new Phaser.Game(GameConfig);

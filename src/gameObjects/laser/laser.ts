@@ -1,3 +1,5 @@
+import game from "../../game";
+
 export default class Laser extends Phaser.Physics.Arcade.Sprite {
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
@@ -10,7 +12,7 @@ export default class Laser extends Phaser.Physics.Arcade.Sprite {
         this.setActive(true);
         this.setVisible(true);
 
-        this.setVelocityX(900);
+        this.setVelocityX(1500);
 
     }
 
@@ -18,11 +20,11 @@ export default class Laser extends Phaser.Physics.Arcade.Sprite {
 
         super.preUpdate(time, delta);
 
-        if (this.y <= 0) {
-            this.setActive(false);
-            this.setVisible(false);
+        if (this.x >= parseInt(game.config.width.toString())) {
+            this.destroy();
         }
 
     }
+
 
 }

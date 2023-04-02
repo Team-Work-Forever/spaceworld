@@ -1,4 +1,4 @@
-import { Scene } from "phaser";
+import MainScene from "../../../scenes/main-scene";
 import { ItemType } from "../../items/item-type";
 import { Asteroid } from "../asteroid";
 
@@ -6,7 +6,7 @@ var sprite: string = 'blue_asteroid';
 
 export default class BlueAsteroid extends Asteroid {
 
-    constructor(scene: Scene, x: number, y: number) {
+    constructor(scene: MainScene, x: number, y: number) {
         super(scene, x, y, sprite, ItemType.BLUE);
     }
 

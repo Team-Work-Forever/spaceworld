@@ -15,15 +15,15 @@ export default class Item extends Phaser.Physics.Arcade.Sprite {
         this.scene.add.existing(this);
     }
 
-    // display(x: number, y: number) {
+    display(x: number, y: number) {
 
-    //     this.body.reset(x, y);
-    //     this.setActive(true);
-    //     this.setVisible(true);
+        this.body.reset(x, y);
+        this.setActive(true);
+        this.setVisible(true);
 
-    //     this.setVelocityX(70);
-    //     this.setVelocityY(70);
+        this.setVelocityX(70);
+        this.setVelocityY(70);
 
-    // }
+    }
 
 }

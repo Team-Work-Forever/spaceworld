@@ -1,13 +1,15 @@
 import Phaser from "phaser";
 import MainScene from "../scenes/main-scene";
-import LayserGroup from "./layser/laser-group";
+import LaserGroup from "./laser/laser-group";
+import Laser from "./laser/laser";
 
 export default class Player extends Phaser.Physics.Arcade.Group {
 
-    private velocity: number = 500
+    private max_lifes: number = 3;
+    private _lifes: number = this.max_lifes;
 
-    private x: number
-    private y: number
+    private x: number;
+    private y: number;
 
     private _weapon_x: number = 5;
     private _weapon_y: number = 65;
@@ -16,7 +18,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
     private player: Phaser.Physics.Arcade.Sprite;
     private _weapon: Phaser.Physics.Arcade.Sprite;
-    private _layser_group: LayserGroup;
+    private _laser_group: LaserGroup;
 
     constructor(scene: MainScene, x: number, y: number) {
 
@@ -24,7 +26,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
             collideWorldBounds: true,
         });
 
-        this._layser_group = new LayserGroup(scene);
+        this._laser_group = new LaserGroup(scene);
 
         this.x = x;
         this.y = y;
@@ -50,7 +52,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
         })
 
         this.scene.input.on('pointerdown', () => {
-            this.shotLasers();
+            this.shot_lasers()
         })
 
     }
@@ -65,18 +67,6 @@ export default class Player extends Phaser.Physics.Arcade.Group {
         this._weapon = this.scene.physics.add.sprite(this.x + this._weapon_x, this.y + this._weapon_y, 'weapon');
         this.scene.physics.world.enableBody(this._weapon);
         this._weapon.setCollideWorldBounds(true);
-    }
-
-    setDefault() {
-        this.setVelocityY(0);
-    }
-
-    moveUp() {
-        this.setVelocityY(-this.velocity);
-    }
-
-    moveDown() {
-        this.setVelocityY(this.velocity);
     }
 
     set_animations() {
@@ -111,12 +101,27 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
     }
 
-    shotLasers() {
-        this._layser_group.fireLayser(this.player.x + this._weapon_x + 145, this.player.y + this._weapon_y - 1);
+    take_damage() {
+        this._lifes--;
     }
 
-    update() {
-        this.player.anims.play('move', true)
+    shot_lasers() {
+        // this._laser_group.fireLaser(this.player.x + this._weapon_x + 145, this.player.y + this._weapon_y - 1, timer);
+        
+        const layser = this._laser_group.getFirstDead(true) as Laser;
+
+        if (layser) {
+            layser.fire(this.player.x + this._weapon_x + 145, this.player.y + this._weapon_y - 1);
+        }
+
+    }
+
+    update(): void {
+        this.player.anims.play('move', true);
+
+        if (this._lifes < this.max_lifes)
+            console.log('Fodeu-se')
+
     }
 
     get player_tile() {
@@ -124,6 +129,11 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     }
 
     get laser_group() {
-        return this._layser_group;
+        return this._laser_group;
     }
+
+    get lifes() {
+        return this._lifes;
+    }
+
 }
