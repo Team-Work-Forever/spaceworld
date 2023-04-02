@@ -1,4 +1,4 @@
-import MainScene from "./scenes/main-scene";
+import MainScene from './scenes/main-scene';
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
     type: Phaser.WEBGL,
@@ -7,15 +7,15 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
     height: window.innerHeight,
     parent: 'game',
     scale: {
-        mode: Phaser.Scale.FIT
+        mode: Phaser.Scale.FIT,
     },
     scene: [MainScene],
     input: {
-        keyboard: true
+        keyboard: true,
     },
     physics: {
-        default: 'arcade'
+        default: 'arcade',
     },
     backgroundColor: '#000000',
-    render: { pixelArt: false, antialias: true }
+    render: { pixelArt: false, antialias: true },
 };

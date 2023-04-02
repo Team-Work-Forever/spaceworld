@@ -1,10 +1,9 @@
-import MainScene from "../../scenes/main-scene";
-import BlueAsteroid from "./asteroids/blue-asteroid"
-import YellowAsteroid from "./asteroids/yellow-asteroid";
-import PurpleAsteroid from "./asteroids/purple-asteroid";
+import MainScene from '../../scenes/main-scene';
+import BlueAsteroid from './asteroids/blue-asteroid';
+import YellowAsteroid from './asteroids/yellow-asteroid';
+import PurpleAsteroid from './asteroids/purple-asteroid';
 
 export class AsteroidFactory {
-   
     private _main_scene: MainScene;
 
     constructor(main_scene: MainScene) {
@@ -22,5 +21,4 @@ export class AsteroidFactory {
     createPurpleAsteroid(x: number, y: number): PurpleAsteroid {
         return new PurpleAsteroid(this._main_scene, x, y);
     }
-
 }

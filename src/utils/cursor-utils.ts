@@ -1,8 +1,7 @@
-import Phaser from "phaser"
+import Phaser from 'phaser';
 
 export default class KeyBoardInput {
-
-    private _cursor: Phaser.Types.Input.Keyboard.CursorKeys
+    private _cursor: Phaser.Types.Input.Keyboard.CursorKeys;
 
     constructor(scene: Phaser.Scene) {
         this._cursor = scene.input.keyboard.createCursorKeys();
@@ -11,5 +10,4 @@ export default class KeyBoardInput {
     get cursor() {
         return this._cursor;
     }
-
 }
