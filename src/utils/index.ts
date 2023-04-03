@@ -1,4 +1,4 @@
-import Align from './align-utils';
-import KeyBoardInput from './cursor-utils';
+import * as ScaleUtils from './scale-utils';
+import KeyBoardInput from './keyboard-utils';
 
-export { Align, KeyBoardInput };
+export { ScaleUtils, KeyBoardInput };

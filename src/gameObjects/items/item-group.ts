@@ -10,27 +10,5 @@ export default class ItemGroup extends Phaser.Physics.Arcade.Group {
             visible: false,
             key: 'item',
         });
-
-        // this.createMultiple({
-        //     classType: Item,
-        //     frameQuantity: qty_items,
-        //     active: false,
-        //     visible: false,
-        //     randomFrame: true,
-        //     key: 'item',
-        // });
     }
-
-    // showItems(x: number, y: number) {
-    //     const item = this.getFirstDead(false) as Item;
-
-    //     if (item) {
-    //         item.slb = Math.ceil(Math.random() * 2);
-
-    //         console.log('Macacos não são ovos');
-
-    //         item.setFrame(item.slb);
-    //         item.display(x, y);
-    //     }
-    // }
 }

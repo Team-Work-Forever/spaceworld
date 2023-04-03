@@ -21,7 +21,6 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     private y: number;
 
     private _permission: boolean = true;
-    private _shoot_count: number = 0;
 
     private _weapon_stress_out: boolean = false;
     private _weapon_fire_rate: number = 0.15;
@@ -35,8 +34,6 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     private player: Phaser.Physics.Arcade.Sprite;
     private _weapon: Phaser.Physics.Arcade.Sprite;
     private _laser_group: LaserGroup;
-
-    private _laserTimerEvent: Phaser.Time.TimerEvent;
 
     constructor(scene: MainScene, x: number, y: number) {
         super(scene.physics.world, scene, {
@@ -81,9 +78,6 @@ export default class Player extends Phaser.Physics.Arcade.Group {
                     duration: 100,
                     ease: 'Sine.easeOut',
                 });
-
-                // this.player.setY(pointer.y);
-                // this._weapon.setY(pointer.y + this._weapon_y);
             }
         });
     }
@@ -122,7 +116,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
             repeat: -1,
         });
 
-        // hit animation
+        // Hit animation
         this.scene.anims.create({
             key: 'hit',
             frames: this.scene.anims.generateFrameNumbers('player', {
@@ -133,7 +127,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
             repeat: -1,
         });
 
-        // Destroy
+        // Destroy Animation
         this.scene.anims.create({
             key: 'destroy',
             frames: [{ key: 'player', frame: 6 }],
@@ -141,6 +135,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
             repeat: -1,
         });
 
+        // Weapon Stress Animation
         this.scene.anims.create({
             key: 'stress',
             frames: this.scene.anims.generateFrameNumbers('weapon', {
@@ -151,6 +146,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
             repeat: -1,
         });
 
+        // Weapon Idle Animation
         this.scene.anims.create({
             key: 'idle',
             frames: this.scene.anims.generateFrameNumbers('weapon', {
@@ -161,6 +157,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
             repeat: -1,
         });
 
+        // Weapon First Animation
         this.scene.anims.create({
             key: 'first',
             frames: this.scene.anims.generateFrameNumbers('weapon', {
@@ -171,18 +168,21 @@ export default class Player extends Phaser.Physics.Arcade.Group {
         });
     }
 
+    // Increment Player life
     increment_life() {
         if (this._lifes < player_max_lifes) {
             this._lifes++;
         }
     }
 
+    // Decrease Player Life
     take_damage() {
         if (this.lifes > 0) {
             this._lifes--;
         }
     }
 
+    // Shot Layers
     shot_lasers(time: number) {
         this._weapon.stop();
         if (
@@ -207,8 +207,6 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     public preUpdate(time: number): void {
         if (this.keyboard.cursor.space.isDown && !this._weapon_stress_out) {
             this.shot_lasers(time);
-            // this._weapon.stop();
-            // this._weapon.play('first');
         }
 
         if (this._weapon_stress > this._weapon_max_stress) {

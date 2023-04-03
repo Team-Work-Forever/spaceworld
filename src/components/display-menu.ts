@@ -16,7 +16,7 @@ export default class DisplayMenu {
         this._left_container = scene.add.container(100, 80);
         this._right_container = scene.add.container(width - 132, 80);
         this._bottom_right_container = scene.add.container(
-            width - 132 - this._gap,
+            width - 200 - this._gap,
             height - 80,
         );
 
@@ -27,15 +27,11 @@ export default class DisplayMenu {
         this.addToRightContainer(scene);
 
         // Bottom Right Side
-        this.addToBottomRightContainer(
-            scene,
-            width - 132 - this._gap - 70,
-            height - 80,
-        );
+        this.addToBottomRightContainer(scene);
     }
 
-    addToBottomRightContainer(scene: Phaser.Scene, x: number, y: number) {
-        const energy_bar = new EnergyBar(scene, x, y);
+    addToBottomRightContainer(scene: Phaser.Scene) {
+        const energy_bar = new EnergyBar(scene);
         this._bottom_right_container.add(energy_bar);
     }
 

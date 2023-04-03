@@ -9,7 +9,11 @@ import Laser from '../gameObjects/laser/laser';
 import Player from '../gameObjects/player';
 import Item from '../gameObjects/items/item';
 import { ItemType } from '../gameObjects/items/item-type';
-import { player_max_lifes } from '../config';
+import {
+    background_velocity,
+    increment_velocity_asteroids,
+    player_max_lifes,
+} from '../config';
 
 export default class MainScene extends Phaser.Scene {
     constructor() {
@@ -68,7 +72,7 @@ export default class MainScene extends Phaser.Scene {
         const { width, height } = this.scale;
 
         // Run UI
-        this.scene.run('ui');
+        this.scene.run('hud');
 
         this._background = this.add
             .tileSprite(0, 0, width, height, 'background')
@@ -185,15 +189,17 @@ export default class MainScene extends Phaser.Scene {
         object.scaleX = object.scaleY;
 
         object.setGravityX(this._speed * this._level);
-        this._level += 0.01;
+        this._level += increment_velocity_asteroids;
 
         this.timer.delay = Phaser.Math.Between(500, 1000);
         this.timer.paused = false;
     }
 
     update(): void {
-        var x = 0.5;
-        this._background.tilePositionX += x;
+        // Background velocity
+        this._background.tilePositionX += background_velocity;
+
+        // Update Energy Bar
         this.events.emit('energyChanged', this._player.weapon_stress);
 
         // Recolher items
@@ -201,6 +207,7 @@ export default class MainScene extends Phaser.Scene {
             this.physics.moveToObject(item, this._player.player_tile, 1000);
         });
 
+        // TODO: Retirar isto!
         this._info_text.setText([
             'Used: ',
             this._player.laser_group.getTotalUsed().toString(),

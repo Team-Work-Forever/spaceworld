@@ -7,7 +7,7 @@ export default class HudScene extends Phaser.Scene {
     private game_scene: MainScene;
 
     constructor() {
-        super('ui');
+        super('hud');
     }
 
     preload() {
@@ -30,9 +30,11 @@ export default class HudScene extends Phaser.Scene {
     }
 
     create() {
+        // Display HUD
         this.displayMenu = new DisplayMenu(this);
         this.game_scene = this.scene.get('main-scene') as MainScene;
 
+        // Events
         this.game_scene.events.on('addScore', this.add_points, this);
         this.game_scene.events.on('hitPlayer', this.hitPlayer, this);
         this.game_scene.events.on('catchLife', this.incrementLife, this);

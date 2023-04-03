@@ -56,8 +56,6 @@ export class Asteroid extends Phaser.Physics.Arcade.Sprite {
             ),
         );
 
-        console.log(`Supose RND: ${Phaser.Math.RND.integerInRange(0, 100)}`);
-
         this._isDestroied = true;
     }
 
