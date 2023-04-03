@@ -15,13 +15,13 @@ export default class ItemFactory {
     private _main_scene: MainScene;
     private _probability: Prob[] = [
         {
-            probability: 0.85,
+            probability: 0.6,
         },
         {
             probability: 0.15,
         },
         {
-            probability: 0.05,
+            probability: 0.15,
         },
     ];
 
@@ -55,8 +55,6 @@ export default class ItemFactory {
         itemType: ItemType,
         is_heart: boolean,
     ): Item {
-        let item: Item = undefined;
-
         const random = Math.random();
 
         let sum = 0;
@@ -69,20 +67,15 @@ export default class ItemFactory {
                     case 0:
                         return this.createNormalCrystal(itemType, x, y);
                     case 1:
-                        if (!is_heart) {
-                            i++;
-                            continue;
-                        }
-
-                        return this.createHeart(x, y);
-
+                        if (is_heart) return this.createHeart(x, y);
+                        return this.createNormalCrystal(itemType, x, y);
                     case 2:
                         return this.createInvertCrystal(x, y);
                 }
             }
         }
 
-        return item;
+        return this.createNormalCrystal(itemType, x, y);
     }
 
     private createNormalCrystal(itemType: ItemType, x: number, y: number) {
