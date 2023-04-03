@@ -8,7 +8,6 @@ export default class ItemGroup extends Phaser.Physics.Arcade.Group {
             max: qty_items,
             active: false,
             visible: false,
-            key: 'item',
         });
     }
 }

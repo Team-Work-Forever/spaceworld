@@ -1,6 +1,7 @@
-import { heart_probability } from '../../config';
+import { heart_probability, invert_pill_probability } from '../../config';
 import MainScene from '../../scenes/main-scene';
 import Item from '../items/item';
+import ItemFactory from '../items/item-factory';
 import { ItemType } from '../items/item-type';
 
 export class Asteroid extends Phaser.Physics.Arcade.Sprite {
@@ -9,6 +10,7 @@ export class Asteroid extends Phaser.Physics.Arcade.Sprite {
     private _sprite: string;
     private _itemType: ItemType;
     private _isDestroied: boolean = false;
+    private _itemFactory: ItemFactory;
 
     constructor(
         scene: MainScene,
@@ -18,6 +20,8 @@ export class Asteroid extends Phaser.Physics.Arcade.Sprite {
         itemType: ItemType,
     ) {
         super(scene, x, y, sprite, itemType);
+
+        this._itemFactory = new ItemFactory(scene);
 
         this._sprite = sprite;
         this._itemType = itemType;
@@ -40,19 +44,13 @@ export class Asteroid extends Phaser.Physics.Arcade.Sprite {
         this.setFrictionX(20);
         this.scene._asteroidGroup.remove(this);
 
-        const heart_rnd = Phaser.Math.RND.integerInRange(0, heart_probability);
-
         // Spawn o cristal
         this.scene._itemGroup.add(
-            new Item(
-                this.scene,
+            this._itemFactory.createRandom(
                 this.x,
                 this.y,
-                heart_rnd === 0
-                    ? is_heart
-                        ? ItemType.HEART
-                        : this._itemType
-                    : this._itemType,
+                this._itemType,
+                is_heart,
             ),
         );
 

@@ -20,6 +20,7 @@ export default class MainScene extends Phaser.Scene {
         super('main-scene');
     }
 
+    private _is_inverted: boolean = false;
     private _speed: number = -200;
     private _level: number = 1;
     private _player: Player;
@@ -118,6 +119,8 @@ export default class MainScene extends Phaser.Scene {
                             10,
                         );
                     }
+                } else if (item.itemType === ItemType.SCALE_PILL) {
+                    this.invertWorld();
                 } else {
                     this.events.emit('addScore', item.itemType);
                 }
@@ -152,6 +155,18 @@ export default class MainScene extends Phaser.Scene {
             },
             null,
         );
+    }
+
+    private invertWorld() {
+        const camera = this.cameras.main;
+
+        if (this._is_inverted) {
+            camera.zoomTo(-1, 1000);
+        } else {
+            camera.zoomTo(1, 1000);
+        }
+
+        this._is_inverted = !this._is_inverted;
     }
 
     spawnAsteroids() {

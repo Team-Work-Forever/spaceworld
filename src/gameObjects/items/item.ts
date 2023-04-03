@@ -4,15 +4,20 @@ import { ItemType } from './item-type';
 export default class Item extends Phaser.Physics.Arcade.Sprite {
     declare body: Phaser.Physics.Arcade.Body;
     private _itemType: ItemType;
+    private _probability: number;
 
-    constructor(scene: Scene, x: number, y: number, itemType: ItemType) {
-        super(scene, x, y, itemType == ItemType.HEART ? 'heart' : 'item');
+    constructor(
+        scene: Scene,
+        x: number,
+        y: number,
+        itemType: ItemType,
+        sprite: string,
+        probability: number,
+    ) {
+        super(scene, x, y, sprite);
 
         this._itemType = itemType;
-
-        // Define qual cristal escolher
-        // Caso seja um heart
-        this.setFrame(itemType == ItemType.HEART ? 1 : itemType, true);
+        this._probability = probability;
 
         this.scene.physics.world.enableBody(this);
         this.scene.add.existing(this);
@@ -24,5 +29,9 @@ export default class Item extends Phaser.Physics.Arcade.Sprite {
 
     get itemType() {
         return this._itemType;
+    }
+
+    get probability() {
+        return this._probability;
     }
 }
