@@ -1,8 +1,10 @@
 import { DisplayMenu } from '../components';
 import { ItemType } from '../gameObjects/items/item-type';
+import MainScene from './main-scene';
 
 export default class HudScene extends Phaser.Scene {
     private displayMenu: DisplayMenu;
+    private game_scene: MainScene;
 
     constructor() {
         super('ui');
@@ -29,17 +31,27 @@ export default class HudScene extends Phaser.Scene {
 
     create() {
         this.displayMenu = new DisplayMenu(this);
-        let game_scene: Phaser.Scene = this.scene.get('main-scene');
+        this.game_scene = this.scene.get('main-scene') as MainScene;
 
-        game_scene.events.on('addScore', this.add_points, this);
-        game_scene.events.on('hitPlayer', this.hitPlayer, this);
+        this.game_scene.events.on('addScore', this.add_points, this);
+        this.game_scene.events.on('hitPlayer', this.hitPlayer, this);
+        this.game_scene.events.on('catchLife', this.incrementLife, this);
+        this.game_scene.events.on('energyChanged', this.energyChanged, this);
+    }
+
+    energyChanged(number: number) {
+        this.displayMenu.updateEnergy(number);
+    }
+
+    incrementLife(lifes: number) {
+        this.displayMenu.increaseLife(lifes);
     }
 
     hitPlayer(lifes: number) {
         this.displayMenu.decreaseLife(lifes);
     }
 
-    add_points(itemType: ItemType) {
-        this.displayMenu.increaseScore(itemType);
+    add_points(itemType: ItemType, score?: number) {
+        this.displayMenu.increaseScore(itemType, score);
     }
 }

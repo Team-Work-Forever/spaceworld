@@ -6,18 +6,18 @@ import { HeartBar } from './heart-ui';
 export default class DisplayMenu {
     private _point_to_gain: number = 1;
     private _gap: number = 130;
-    private right_container!: Phaser.GameObjects.Container;
-    private left_container!: Phaser.GameObjects.Container;
-    private bottom_right_container!: Phaser.GameObjects.Container;
+    private _right_container!: Phaser.GameObjects.Container;
+    private _left_container!: Phaser.GameObjects.Container;
+    private _bottom_right_container!: Phaser.GameObjects.Container;
 
     constructor(scene: Phaser.Scene) {
         const { width, height } = scene.scale;
 
-        this.left_container = scene.add.container(100, 80);
-        this.right_container = scene.add.container(width - 132, 80);
-        this.bottom_right_container = scene.add.container(
-            width - 200 - 66,
-            height - 75,
+        this._left_container = scene.add.container(100, 80);
+        this._right_container = scene.add.container(width - 132, 80);
+        this._bottom_right_container = scene.add.container(
+            width - 132 - this._gap,
+            height - 80,
         );
 
         // Left Side
@@ -27,18 +27,21 @@ export default class DisplayMenu {
         this.addToRightContainer(scene);
 
         // Bottom Right Side
-        this.addToBottomRightContainer(scene);
+        this.addToBottomRightContainer(
+            scene,
+            width - 132 - this._gap - 70,
+            height - 80,
+        );
     }
 
-    addToBottomRightContainer(scene: Phaser.Scene) {
-        const energy_bar = new EnergyBar(scene);
-
-        this.bottom_right_container.add(energy_bar);
+    addToBottomRightContainer(scene: Phaser.Scene, x: number, y: number) {
+        const energy_bar = new EnergyBar(scene, x, y);
+        this._bottom_right_container.add(energy_bar);
     }
 
     addToLeftContainer(scene: Phaser.Scene) {
         const heart_bar = new HeartBar(scene);
-        this.left_container.add(heart_bar);
+        this._left_container.add(heart_bar);
     }
 
     addToRightContainer(scene: Phaser.Scene) {
@@ -62,20 +65,30 @@ export default class DisplayMenu {
             ItemType.PURPLE,
         );
 
-        this.right_container.add(yellow_crystal);
-        this.right_container.add(purple_crystal);
-        this.right_container.add(blue_crystal);
+        this._right_container.add(yellow_crystal);
+        this._right_container.add(purple_crystal);
+        this._right_container.add(blue_crystal);
+    }
+
+    public updateEnergy(value: number) {
+        const energy_bar = this._bottom_right_container.getAt(0) as EnergyBar;
+        energy_bar.handleEnergyChanged(value, value > 100 ? true : false);
+    }
+
+    public increaseLife(lifes: number) {
+        (this._left_container.getAt(0) as HeartBar).increase_lifes_by_one(
+            lifes,
+        );
     }
 
     public decreaseLife(lifes: number) {
-        const health_bar = this.left_container.getAt(0) as HeartBar;
-        lifes -= 1;
-        health_bar.draw(lifes);
+        const health_bar = this._left_container.getAt(0) as HeartBar;
+        health_bar.decrease_heart(lifes);
     }
 
-    public increaseScore(itemType: ItemType) {
-        (this.right_container.getAt(itemType) as CrystalContainer).increment(
-            this._point_to_gain,
+    public increaseScore(itemType: ItemType, score: number = 0) {
+        (this._right_container.getAt(itemType) as CrystalContainer).increment(
+            this._point_to_gain + score,
         );
     }
 }

@@ -8,6 +8,8 @@ import ItemGroup from '../gameObjects/items/item-group';
 import Laser from '../gameObjects/laser/laser';
 import Player from '../gameObjects/player';
 import Item from '../gameObjects/items/item';
+import { ItemType } from '../gameObjects/items/item-type';
+import { player_max_lifes } from '../config';
 
 export default class MainScene extends Phaser.Scene {
     constructor() {
@@ -30,8 +32,8 @@ export default class MainScene extends Phaser.Scene {
         this.load.image('background', '../assets/background.png');
         this.load.image('bullet', '../assets/bullet.png');
         this.load.spritesheet('item', '../../assets/item.png', {
-            frameWidth: 23.27,
-            frameHeight: 40,
+            frameWidth: 18.25,
+            frameHeight: 33,
         });
         this.load.spritesheet('items', '../../assets/items-menu.png', {
             frameWidth: 57,
@@ -57,7 +59,7 @@ export default class MainScene extends Phaser.Scene {
             frameHeight: 100,
         });
         this.load.spritesheet('weapon', '../../assets/weapon.png', {
-            frameWidth: 217.39,
+            frameWidth: 217,
             frameHeight: 102,
         });
     }
@@ -100,7 +102,21 @@ export default class MainScene extends Phaser.Scene {
             this._itemGroup,
             (_, item: Item) => {
                 item.destroy();
-                this.events.emit('addScore', item.itemType);
+
+                if (item.itemType === ItemType.HEART) {
+                    this.events.emit('catchLife', this._player.lifes);
+                    this._player.increment_life();
+
+                    if (this._player.lifes === player_max_lifes) {
+                        this.events.emit(
+                            'addScore',
+                            Phaser.Math.RND.integerInRange(0, 2),
+                            10,
+                        );
+                    }
+                } else {
+                    this.events.emit('addScore', item.itemType);
+                }
             },
             null,
         );
@@ -110,12 +126,13 @@ export default class MainScene extends Phaser.Scene {
             this._player,
             this._asteroidGroup,
             (_, astoroid: Asteroid) => {
-                astoroid.destroyAndCollect();
+                astoroid.destroyAndCollect(false);
 
                 // player leva dano
-                this._player.take_damage();
                 this.events.emit('hitPlayer', this._player.lifes);
+                this._player.take_damage();
                 this._player.is_hited = true;
+                this.cameras.main.shake(250, 0.005);
             },
             null,
         );
@@ -125,8 +142,9 @@ export default class MainScene extends Phaser.Scene {
             this._player.laser_group,
             this._asteroidGroup,
             (laser: Laser, astoroid: Asteroid) => {
-                astoroid.destroyAndCollect();
+                astoroid.destroyAndCollect(true);
                 laser.destroy();
+                this.cameras.main.shake(250, 0.002);
             },
             null,
         );
@@ -167,6 +185,7 @@ export default class MainScene extends Phaser.Scene {
         object.scaleX = object.scaleY;
 
         object.setGravityX(this._speed * this._level);
+        this._level += 0.01;
 
         this.timer.delay = Phaser.Math.Between(500, 1000);
         this.timer.paused = false;
@@ -175,6 +194,7 @@ export default class MainScene extends Phaser.Scene {
     update(): void {
         var x = 0.5;
         this._background.tilePositionX += x;
+        this.events.emit('energyChanged', this._player.weapon_stress);
 
         // Recolher items
         this._itemGroup.children.each((item: Item) => {
@@ -190,6 +210,10 @@ export default class MainScene extends Phaser.Scene {
             this._asteroidGroup.getTotalUsed().toString(),
             'Free -> Asteroids: ',
             this._asteroidGroup.getTotalFree().toString(),
+            'Weapon Stress: ',
+            this._player.weapon_stress.toString(),
+            'Lifes: ',
+            this._player.lifes.toString(),
         ]);
     }
 }

@@ -21,4 +21,5 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
 };
 
 export const player_initial_lifes = 4;
-export const is_playing = true;
+export const player_max_lifes = player_initial_lifes + 6;
+export const heart_probability = 10; // 10%

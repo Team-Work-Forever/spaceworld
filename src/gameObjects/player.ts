@@ -2,10 +2,14 @@ import Phaser from 'phaser';
 import MainScene from '../scenes/main-scene';
 import LaserGroup from './laser/laser-group';
 import Laser from './laser/laser';
-import { player_initial_lifes } from '../config';
+import { player_initial_lifes, player_max_lifes } from '../config';
 import game from '../game';
+import { KeyBoardInput } from '../utils';
 
 export default class Player extends Phaser.Physics.Arcade.Group {
+    private keyboard: KeyBoardInput;
+    private last: number = 0;
+
     private _is_hit: boolean = false;
 
     private _mouse_gap: number = 150;
@@ -16,6 +20,13 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     private x: number;
     private y: number;
 
+    private _permission: boolean = true;
+    private _shoot_count: number = 0;
+
+    private _weapon_stress_out: boolean = false;
+    private _weapon_fire_rate: number = 0.15;
+    private _weapon_max_stress: number = 100;
+    private _weapon_stress: number = 0;
     private _weapon_x: number = 5;
     private _weapon_y: number = 55;
 
@@ -25,12 +36,15 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     private _weapon: Phaser.Physics.Arcade.Sprite;
     private _laser_group: LaserGroup;
 
+    private _laserTimerEvent: Phaser.Time.TimerEvent;
+
     constructor(scene: MainScene, x: number, y: number) {
         super(scene.physics.world, scene, {
             collideWorldBounds: true,
         });
 
         this._laser_group = new LaserGroup(scene);
+        this.keyboard = new KeyBoardInput(scene);
 
         this.x = x;
         this.y = y;
@@ -54,14 +68,23 @@ export default class Player extends Phaser.Physics.Arcade.Group {
                     parseInt(game.config.height.toString()) - this._mouse_gap &&
                 pointer.y > this._mouse_gap
             ) {
-                this.player.setY(pointer.y);
-                this._weapon.setY(pointer.y + this._weapon_y);
-            } else {
-            }
-        });
+                this.scene.tweens.add({
+                    targets: this.player_tile,
+                    y: pointer.y,
+                    duration: 100,
+                    ease: 'Sine.easeOut',
+                });
 
-        this.scene.input.on('pointerdown', () => {
-            this.shot_lasers();
+                this.scene.tweens.add({
+                    targets: this._weapon,
+                    y: pointer.y + this._weapon_y,
+                    duration: 100,
+                    ease: 'Sine.easeOut',
+                });
+
+                // this.player.setY(pointer.y);
+                // this._weapon.setY(pointer.y + this._weapon_y);
+            }
         });
     }
 
@@ -117,30 +140,97 @@ export default class Player extends Phaser.Physics.Arcade.Group {
             frameRate: 8,
             repeat: -1,
         });
+
+        this.scene.anims.create({
+            key: 'stress',
+            frames: this.scene.anims.generateFrameNumbers('weapon', {
+                start: 2,
+                end: 4,
+            }),
+            frameRate: 10,
+            repeat: -1,
+        });
+
+        this.scene.anims.create({
+            key: 'idle',
+            frames: this.scene.anims.generateFrameNumbers('weapon', {
+                start: 0,
+                end: 1,
+            }),
+            frameRate: 10,
+            repeat: -1,
+        });
+
+        this.scene.anims.create({
+            key: 'first',
+            frames: this.scene.anims.generateFrameNumbers('weapon', {
+                start: 0,
+            }),
+            frameRate: 10,
+            repeat: -1,
+        });
     }
 
-    take_damage() {
-        this._lifes--;
-    }
-
-    shot_lasers() {
-        // this._laser_group.fireLaser(this.player.x + this._weapon_x + 145, this.player.y + this._weapon_y - 1, timer);
-
-        const laser = this._laser_group.getFirstDead(true) as Laser;
-
-        if (laser) {
-            laser.fire(
-                this.player.x + this._weapon_x + 115,
-                this.player.y + this._weapon_y - 1,
-            );
+    increment_life() {
+        if (this._lifes < player_max_lifes) {
+            this._lifes++;
         }
     }
 
-    public preUpdate(): void {
+    take_damage() {
+        if (this.lifes > 0) {
+            this._lifes--;
+        }
+    }
+
+    shot_lasers(time: number) {
+        this._weapon.stop();
+        if (
+            time > this.last &&
+            this._permission === true &&
+            this._weapon_stress < this._weapon_max_stress
+        ) {
+            const laser = this._laser_group.getFirstDead(true) as Laser;
+
+            if (laser) {
+                laser.fire(
+                    this.player.x + this._weapon_x + 115,
+                    this.player.y + this._weapon_y - 1,
+                );
+                this.last = time + 150;
+                this._weapon_stress += 10;
+                this._weapon.play('idle', true);
+            }
+        }
+    }
+
+    public preUpdate(time: number): void {
+        if (this.keyboard.cursor.space.isDown && !this._weapon_stress_out) {
+            this.shot_lasers(time);
+            // this._weapon.stop();
+            // this._weapon.play('first');
+        }
+
+        if (this._weapon_stress > this._weapon_max_stress) {
+            this._weapon_stress_out = true;
+        } else if (this._weapon_stress <= 5) {
+            this._weapon_stress_out = false;
+        }
+
+        if (this._weapon_stress > 5) {
+            this._weapon_stress -= this._weapon_fire_rate;
+        }
+
+        if (this._weapon_stress_out) {
+            this._weapon.play('stress', true);
+        } else {
+            this._weapon.play('first');
+        }
+
         if (!this.is_hited) {
             this.player.anims.play('move', true);
         } else {
-            this.player.play('hit');
+            this.player.play('hit', true);
 
             this.scene.time.addEvent({
                 delay: 150,
@@ -174,5 +264,9 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
     get is_hited() {
         return this._is_hit;
+    }
+
+    get weapon_stress() {
+        return this._weapon_stress;
     }
 }

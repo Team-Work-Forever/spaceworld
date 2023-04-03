@@ -1,3 +1,4 @@
+import { heart_probability } from '../../config';
 import MainScene from '../../scenes/main-scene';
 import Item from '../items/item';
 import { ItemType } from '../items/item-type';
@@ -33,16 +34,29 @@ export class Asteroid extends Phaser.Physics.Arcade.Sprite {
     protected setExplode(): void {}
 
     // TODO: Drop Item
-    destroyAndCollect(): void {
+    destroyAndCollect(is_heart: boolean = false): void {
         this.play('explode-' + this.sprite);
 
         this.setFrictionX(20);
         this.scene._asteroidGroup.remove(this);
 
+        const heart_rnd = Phaser.Math.RND.integerInRange(0, heart_probability);
+
         // Spawn o cristal
         this.scene._itemGroup.add(
-            new Item(this.scene, this.x, this.y, this._itemType),
+            new Item(
+                this.scene,
+                this.x,
+                this.y,
+                heart_rnd === 0
+                    ? is_heart
+                        ? ItemType.HEART
+                        : this._itemType
+                    : this._itemType,
+            ),
         );
+
+        console.log(`Supose RND: ${Phaser.Math.RND.integerInRange(0, 100)}`);
 
         this._isDestroied = true;
     }

@@ -6,25 +6,17 @@ export default class Item extends Phaser.Physics.Arcade.Sprite {
     private _itemType: ItemType;
 
     constructor(scene: Scene, x: number, y: number, itemType: ItemType) {
-        super(scene, x, y, 'item');
+        super(scene, x, y, itemType == ItemType.HEART ? 'heart' : 'item');
 
         this._itemType = itemType;
 
         // Define qual cristal escolher
-        this.setFrame(itemType, true);
+        // Caso seja um heart
+        this.setFrame(itemType == ItemType.HEART ? 1 : itemType, true);
 
         this.scene.physics.world.enableBody(this);
         this.scene.add.existing(this);
     }
-
-    // display(x: number, y: number) {
-    //     this.body.reset(x, y);
-    //     this.setActive(true);
-    //     this.setVisible(true);
-
-    //     this.setVelocityX(70);
-    //     this.setVelocityY(70);
-    // }
 
     set itemType(itemType: ItemType) {
         this._itemType = itemType;

@@ -1,6 +1,8 @@
 import game from '../../game';
 
 export default class Laser extends Phaser.Physics.Arcade.Sprite {
+    private max_speed: number = 1500;
+
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, 'bullet');
     }
@@ -10,7 +12,7 @@ export default class Laser extends Phaser.Physics.Arcade.Sprite {
         this.setActive(true);
         this.setVisible(true);
 
-        this.setVelocityX(1500);
+        this.setVelocityX(this.max_speed);
     }
 
     protected preUpdate(time: number, delta: number): void {
