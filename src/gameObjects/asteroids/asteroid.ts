@@ -1,6 +1,4 @@
-import { heart_probability, invert_pill_probability } from '../../config';
 import MainScene from '../../scenes/main-scene';
-import Item from '../items/item';
 import ItemFactory from '../items/item-factory';
 import { ItemType } from '../items/item-type';
 
