@@ -5,7 +5,7 @@ export default class EnergyBar extends Phaser.GameObjects.Container {
     private _heigh: number = 35;
     private _initial_value: number = 5;
 
-    private lastHealth = 100;
+    private lastEnergy = 100;
 
     constructor(scene: Phaser.Scene) {
         super(scene);
@@ -30,12 +30,15 @@ export default class EnergyBar extends Phaser.GameObjects.Container {
         this._graphics.fillStyle(0x808080);
         this._graphics.fillRoundedRect(0, 0, this._width, this._heigh, 5)
             .setPosition;
+
         if (percent > 0) {
             if (is_not_enabled) {
                 this._graphics.fillStyle(0xd80404);
             } else {
-                if (percent > 0.6) {
+                if (percent > 0.6 && percent <= 0.8) {
                     this._graphics.fillStyle(0xf7d555);
+                } else if (percent > 0.8) {
+                    this._graphics.fillStyle(0xff5400);
                 } else {
                     this._graphics.fillStyle(0x00ff00);
                 }
@@ -53,7 +56,7 @@ export default class EnergyBar extends Phaser.GameObjects.Container {
 
     public handleEnergyChanged(value: number, is_not_enabled: boolean = false) {
         this.scene.tweens.addCounter({
-            from: this.lastHealth,
+            from: this.lastEnergy,
             to: value,
             duration: 200,
             ease: Phaser.Math.Easing.Sine.InOut,
@@ -65,6 +68,6 @@ export default class EnergyBar extends Phaser.GameObjects.Container {
 
         this.setEnergyBar(value, is_not_enabled);
 
-        this.lastHealth = value;
+        this.lastEnergy = value;
     }
 }

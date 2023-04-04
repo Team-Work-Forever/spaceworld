@@ -20,14 +20,14 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     private x: number;
     private y: number;
 
-    private _permission: boolean = true;
-
     private _weapon_stress_out: boolean = false;
     private _weapon_fire_rate: number = 0.15;
     private _weapon_max_stress: number = 100;
     private _weapon_stress: number = 0;
     private _weapon_x: number = 5;
     private _weapon_y: number = 55;
+
+    private _time: number = 50;
 
     declare body: Phaser.Physics.Arcade.Body;
 
@@ -187,7 +187,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
         this._weapon.stop();
         if (
             time > this.last &&
-            this._permission === true &&
+            !this._weapon_stress_out &&
             this._weapon_stress < this._weapon_max_stress
         ) {
             const laser = this._laser_group.getFirstDead(true) as Laser;
@@ -240,7 +240,11 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
         if (this.lifes <= 0) {
             this.player.play('destroy');
-            game.scene.pause('main-scene');
+            this.scene.scene.pause('main-scene');
+            if (this._time > 0) {
+                this._time -= this._weapon_fire_rate;
+            }
+            this.scene.scene.run('game_over-scene');
         }
     }
 
@@ -266,5 +270,9 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
     get weapon_stress() {
         return this._weapon_stress;
+    }
+
+    get permission() {
+        return this._weapon_stress_out;
     }
 }

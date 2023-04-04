@@ -14,6 +14,7 @@ import {
     increment_velocity_asteroids,
     player_max_lifes,
 } from '../config';
+import game from '../game';
 
 export default class MainScene extends Phaser.Scene {
     constructor() {
@@ -95,7 +96,7 @@ export default class MainScene extends Phaser.Scene {
         });
 
         // UI
-        this._info_text = this.add.text(0, 0, 'itemType OLÉÉÉÉ OLÉÉÉÉ OLÉÉÉÉ', {
+        this._info_text = this.add.text(0, 0, 'itemType', {
             color: '#00ff00',
         });
 
@@ -215,7 +216,11 @@ export default class MainScene extends Phaser.Scene {
         this._background.tilePositionX += background_velocity;
 
         // Update Energy Bar
-        this.events.emit('energyChanged', this._player.weapon_stress);
+        this.events.emit(
+            'energyChanged',
+            this._player.weapon_stress,
+            this._player.permission,
+        );
 
         // Recolher items
         this._itemGroup.children.each((item: Item) => {
@@ -236,6 +241,8 @@ export default class MainScene extends Phaser.Scene {
             this._player.weapon_stress.toString(),
             'Lifes: ',
             this._player.lifes.toString(),
+            'Permition: ',
+            this._player.permission.toString(),
         ]);
     }
 }

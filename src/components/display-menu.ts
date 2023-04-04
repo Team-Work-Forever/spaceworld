@@ -66,9 +66,9 @@ export default class DisplayMenu {
         this._right_container.add(blue_crystal);
     }
 
-    public updateEnergy(value: number) {
+    public updateEnergy(value: number, permission: boolean = false) {
         const energy_bar = this._bottom_right_container.getAt(0) as EnergyBar;
-        energy_bar.handleEnergyChanged(value, value > 100 ? true : false);
+        energy_bar.handleEnergyChanged(value, permission);
     }
 
     public increaseLife(lifes: number) {

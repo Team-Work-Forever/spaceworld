@@ -1,4 +1,5 @@
 import { MainScene, HudScene, StartScene } from './scenes';
+import GameOverScene from './scenes/game-over-scene';
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
     type: Phaser.WEBGL,
@@ -9,7 +10,7 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
     scale: {
         mode: Phaser.Scale.FIT,
     },
-    scene: [StartScene, MainScene, HudScene],
+    scene: [StartScene, MainScene, HudScene, GameOverScene],
     input: {
         keyboard: true,
     },
@@ -26,3 +27,4 @@ export const heart_probability = 10; // 10%
 export const invert_pill_probability = 1; // 10%
 export const increment_velocity_asteroids = 0.05; // 10%
 export const background_velocity = 0.5;
+export const background_menu_velocity = 0.2;

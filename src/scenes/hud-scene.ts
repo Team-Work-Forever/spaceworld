@@ -41,8 +41,8 @@ export default class HudScene extends Phaser.Scene {
         this.game_scene.events.on('energyChanged', this.energyChanged, this);
     }
 
-    energyChanged(number: number) {
-        this.displayMenu.updateEnergy(number);
+    energyChanged(number: number, permission: boolean = false) {
+        this.displayMenu.updateEnergy(number, permission);
     }
 
     incrementLife(lifes: number) {
