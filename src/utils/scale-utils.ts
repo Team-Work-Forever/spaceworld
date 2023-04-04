@@ -1,5 +1,5 @@
 class Scale {
-    public scaleTo(object: Phaser.Physics.Arcade.Sprite, scale) {
+    public scaleTo(object: Phaser.GameObjects.Image, scale) {
         object.displayHeight = scale;
         object.scaleX = object.scaleY;
     }

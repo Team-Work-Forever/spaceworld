@@ -1,4 +1,4 @@
-import { MainScene, HudScene } from './scenes';
+import { MainScene, HudScene, StartScene } from './scenes';
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
     type: Phaser.WEBGL,
@@ -9,7 +9,7 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
     scale: {
         mode: Phaser.Scale.FIT,
     },
-    scene: [MainScene, HudScene],
+    scene: [StartScene, MainScene, HudScene],
     input: {
         keyboard: true,
     },
@@ -25,4 +25,4 @@ export const player_max_lifes = player_initial_lifes + 6;
 export const heart_probability = 10; // 10%
 export const invert_pill_probability = 1; // 10%
 export const increment_velocity_asteroids = 0.05; // 10%
-export const background_velocity = 2;
+export const background_velocity = 0.5;

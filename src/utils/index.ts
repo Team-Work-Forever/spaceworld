@@ -1,4 +1,4 @@
-import * as ScaleUtils from './scale-utils';
 import KeyBoardInput from './keyboard-utils';
+import scaleUtils from './scale-utils';
 
-export { ScaleUtils, KeyBoardInput };
+export { scaleUtils as ScaleUtils, KeyBoardInput };

@@ -1,4 +1,4 @@
-import { ItemType } from '../gameObjects/items/item-type';
+import { ItemType } from '../../gameObjects/items/item-type';
 
 export default class CrystalContainer extends Phaser.GameObjects.Container {
     private _score: Phaser.GameObjects.Text;

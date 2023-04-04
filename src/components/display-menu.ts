@@ -1,7 +1,7 @@
 import { ItemType } from '../gameObjects/items/item-type';
-import CrystalContainer from './crystal_container';
-import EnergyBar from './energy-bar';
-import { HeartBar } from './heart-ui';
+import CrystalContainer from './ui/crystal_container';
+import EnergyBar from './ui/energy-bar';
+import { HeartBar } from './ui/heart-ui';
 
 export default class DisplayMenu {
     private _point_to_gain: number = 1;

@@ -1,4 +1,4 @@
-import { player_initial_lifes, player_max_lifes } from '../../config';
+import { player_initial_lifes, player_max_lifes } from '../../../config';
 import { HeartType } from './heart';
 
 export default class HeartBar extends Phaser.GameObjects.Container {

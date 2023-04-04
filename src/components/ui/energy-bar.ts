@@ -1,4 +1,4 @@
-export default class Energy_rec extends Phaser.GameObjects.Container {
+export default class EnergyBar extends Phaser.GameObjects.Container {
     private _graphics!: Phaser.GameObjects.Graphics;
     private _text!: Phaser.GameObjects.Text;
     private _width: number = 250;
