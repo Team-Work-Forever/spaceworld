@@ -27,8 +27,6 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     private _weapon_x: number = 5;
     private _weapon_y: number = 55;
 
-    private _time: number = 50;
-
     declare body: Phaser.Physics.Arcade.Body;
 
     private player: Phaser.Physics.Arcade.Sprite;
@@ -238,13 +236,25 @@ export default class Player extends Phaser.Physics.Arcade.Group {
             });
         }
 
+        // if (this.lifes <= 0) {
+        //     this.player.play('destroy');
+        //     setTimeout(() => {
+        //         this.scene.scene.start('game_over-scene');
+        //         this.scene.scene.stop('hud');
+        //     }, 1500);
+        // }
+
         if (this.lifes <= 0) {
             this.player.play('destroy');
-            this.scene.scene.pause('main-scene');
-            if (this._time > 0) {
-                this._time -= this._weapon_fire_rate;
-            }
-            this.scene.scene.run('game_over-scene');
+            setTimeout(() => {
+                console.log(
+                    'Olá, isto é um easter egg! E por acaso, estou agora na paragem letiva da Páscoa.',
+                );
+                if (this.scene) {
+                    this.scene.scene.start('game_over-scene');
+                    this.scene.scene.stop('hud');
+                }
+            }, 1000);
         }
     }
 

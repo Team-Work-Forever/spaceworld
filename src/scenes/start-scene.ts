@@ -30,7 +30,7 @@ export default class StartScene extends Phaser.Scene {
             .tileSprite(0, 0, width, height, 'background')
             .setOrigin(0, 0);
 
-        this.addEsteves(width, height);
+        this.addEsteves(height);
 
         // Display's the right menu
         this.add
@@ -50,9 +50,7 @@ export default class StartScene extends Phaser.Scene {
 
         new SpaceButton(this, 'Start Game', width / 2, buttonHeigh + gap * 1, 1)
             .setInteractive()
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
-                console.log('nem sequer');
-            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {})
             .setScale(1)
             .setInteractive()
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
@@ -67,13 +65,7 @@ export default class StartScene extends Phaser.Scene {
             0.7,
         )
             .setInteractive()
-            .on(
-                Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN,
-                () => {
-                    console.log('nem sequer');
-                },
-                this,
-            );
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {}, this);
 
         new SpaceButton(
             this,
@@ -92,7 +84,7 @@ export default class StartScene extends Phaser.Scene {
             );
     }
 
-    addEsteves(width: number, height: number) {
+    addEsteves(height: number) {
         const esteves = this.add.sprite(80, height - 150, 'esteves-adv');
         esteves.displayHeight = 300;
         esteves.scaleX = esteves.scaleY;
@@ -113,13 +105,6 @@ export default class StartScene extends Phaser.Scene {
     update() {
         this._background.tilePositionX += background_menu_velocity;
     }
-
-    private startGame() {
-        this.scene.start('main-scene');
-    }
-
-    private highScore() {}
-    private controllerScene() {}
 }
 
 // var config = {

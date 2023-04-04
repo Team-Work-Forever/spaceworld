@@ -14,16 +14,15 @@ import {
     increment_velocity_asteroids,
     player_max_lifes,
 } from '../config';
-import game from '../game';
 
 export default class MainScene extends Phaser.Scene {
     constructor() {
         super('main-scene');
     }
 
-    private _is_inverted: boolean = false;
-    private _speed: number = -200;
-    private _level: number = 1;
+    private _is_inverted: boolean;
+    private _speed: number;
+    private _level: number;
     private _player: Player;
     public _itemGroup: ItemGroup;
     public _asteroidGroup: AsteroidGroup;
@@ -33,6 +32,12 @@ export default class MainScene extends Phaser.Scene {
     private _info_text: GameObjects.Text;
 
     private _asteroid_factory: AsteroidFactory = new AsteroidFactory(this);
+
+    init() {
+        this._is_inverted = false;
+        this._speed = -200;
+        this._level = 1;
+    }
 
     preload() {
         this.load.image('background', '../assets/background.png');
@@ -74,11 +79,15 @@ export default class MainScene extends Phaser.Scene {
         const { width, height } = this.scale;
 
         // Run UI
-        this.scene.run('hud');
+        if (!this.scene.manager.isActive('hud')) {
+            this.scene.run('hud');
+        }
 
         this._background = this.add
             .tileSprite(0, 0, width, height, 'background')
             .setOrigin(0);
+
+        this.setUpCount();
 
         this._itemGroup = new ItemGroup(this, 10);
         this._itemGroup.clear(true, true);
@@ -170,6 +179,58 @@ export default class MainScene extends Phaser.Scene {
         this._is_inverted = !this._is_inverted;
     }
 
+    // setUpCount() {
+    //     const { width, height } = this.scale;
+    //     const textHeight = height / 2 - 200;
+    //     var opt: string[] = ['1', '2', '3', 'Start!'];
+
+    //     // Loop para exibir a contagem regressiva
+    //     for (let i = 0; i < opt.length; i++) {
+    //         setTimeout(() => {
+    //             const text = this.add
+    //                 .text(width / 2, textHeight, opt[i], {
+    //                     fontSize: '108px',
+    //                     fontFamily: 'Days One',
+    //                 })
+    //                 .setOrigin(0.5, 0.5);
+    //             // Remove o número após 2 segundos
+    //             setTimeout(() => {
+    //                 text.destroy();
+    //             }, 1500);
+    //         }, i * 1500); // Define um atraso crescente para cada iteração
+    //     }
+    // }
+
+    setUpCount() {
+        const { width, height } = this.scale;
+        const textHeight = height / 2 - 200;
+        const opt: string[] = ['1', '2', '3', 'Start!'];
+        const timePerText: number = 1500;
+
+        // Pause a cena atual
+        this.scene.pause();
+
+        // Loop para exibir a contagem regressiva
+        for (let i = 0; i < opt.length; i++) {
+            setTimeout(() => {
+                const text = this.add
+                    .text(width / 2, textHeight, opt[i], {
+                        fontSize: '108px',
+                        fontFamily: 'Days One',
+                    })
+                    .setOrigin(0.5, 0.5);
+                // Remove o número após 2 segundos
+                setTimeout(() => {
+                    text.destroy();
+                }, timePerText - 100);
+            }, i * timePerText); // Define um atraso crescente para cada iteração
+        }
+
+        setTimeout(() => {
+            this.scene.resume(this);
+        }, timePerText * opt.length);
+    }
+
     spawnAsteroids() {
         const randomY = Phaser.Math.Between(50, 750);
         const objectType = Phaser.Math.Between(1, 3);
@@ -243,6 +304,8 @@ export default class MainScene extends Phaser.Scene {
             this._player.lifes.toString(),
             'Permition: ',
             this._player.permission.toString(),
+            'Asteroid_velocity: ',
+            this._level.toString(),
         ]);
     }
 }
