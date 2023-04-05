@@ -2,6 +2,7 @@ import { ItemType } from '../gameObjects/items/item-type';
 import CrystalContainer from './ui/crystal_container';
 import EnergyBar from './ui/energy-bar';
 import { HeartBar } from './ui/heart-ui';
+import ShieldBar from './ui/shield-bar';
 
 export default class DisplayMenu {
     private _point_to_gain: number = 1;
@@ -9,6 +10,7 @@ export default class DisplayMenu {
     private _right_container!: Phaser.GameObjects.Container;
     private _left_container!: Phaser.GameObjects.Container;
     private _bottom_right_container!: Phaser.GameObjects.Container;
+    private _bottom_left_container!: Phaser.GameObjects.Container;
 
     constructor(scene: Phaser.Scene) {
         const { width, height } = scene.scale;
@@ -17,6 +19,10 @@ export default class DisplayMenu {
         this._right_container = scene.add.container(width - 132, 80);
         this._bottom_right_container = scene.add.container(
             width - 200 - this._gap,
+            height - 80,
+        );
+        this._bottom_left_container = scene.add.container(
+            this._gap - 50,
             height - 80,
         );
 
@@ -28,6 +34,13 @@ export default class DisplayMenu {
 
         // Bottom Right Side
         this.addToBottomRightContainer(scene);
+
+        this.addToBottomLeftContainer(scene);
+    }
+
+    addToBottomLeftContainer(scene: Phaser.Scene) {
+        const shield_bar = new ShieldBar(scene);
+        this._bottom_left_container.add(shield_bar);
     }
 
     addToBottomRightContainer(scene: Phaser.Scene) {
@@ -69,6 +82,12 @@ export default class DisplayMenu {
     public updateEnergy(value: number, permission: boolean = false) {
         const energy_bar = this._bottom_right_container.getAt(0) as EnergyBar;
         energy_bar.handleEnergyChanged(value, permission);
+    }
+
+    public updateShield(value: number, is_active: boolean) {
+        const shield_bar = this._bottom_left_container.getAt(0) as ShieldBar;
+        shield_bar.handleEnergyChanged(value, is_active);
+        shield_bar.setVisible(is_active);
     }
 
     public increaseLife(lifes: number) {

@@ -5,6 +5,7 @@ import Laser from './laser/laser';
 import { player_initial_lifes, player_max_lifes } from '../config';
 import game from '../game';
 import { KeyBoardInput } from '../utils';
+import Shield from './shield';
 
 export default class Player extends Phaser.Physics.Arcade.Group {
     private keyboard: KeyBoardInput;
@@ -20,15 +21,21 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     private x: number;
     private y: number;
 
+    // Weapon
     private _weapon_stress_out: boolean = false;
     private _weapon_fire_rate: number = 0.15;
     private _weapon_max_stress: number = 100;
     private _weapon_stress: number = 0;
     private _weapon_x: number = 5;
     private _weapon_y: number = 55;
+    private _shield_x: number = 140;
+    private _shield_y: number = 10;
+    private _is_active_shild: boolean = false;
 
     declare body: Phaser.Physics.Arcade.Body;
 
+    // Shield not from Marvel
+    private _shield: Shield;
     private player: Phaser.Physics.Arcade.Sprite;
     private _weapon: Phaser.Physics.Arcade.Sprite;
     private _laser_group: LaserGroup;
@@ -76,6 +83,13 @@ export default class Player extends Phaser.Physics.Arcade.Group {
                     duration: 100,
                     ease: 'Sine.easeOut',
                 });
+
+                this.scene.tweens.add({
+                    targets: this._shield,
+                    y: pointer.y + this._shield_y,
+                    duration: 100,
+                    ease: 'Sine.easeOut',
+                });
             }
         });
     }
@@ -100,6 +114,44 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
         this._weapon.displayHeight = this.scale;
         this._weapon.scaleX = this._weapon.scaleY;
+    }
+
+    sheildIncrementLife() {
+        this._shield.increaseLife();
+    }
+
+    shield_take_damage() {
+        if (this._shield.life < 5) {
+            this.detach_shield();
+            return;
+        }
+
+        this._shield.decreaseLife(Math.ceil(100 / 3));
+    }
+
+    attach_shield() {
+        if (this._is_active_shild) {
+            return;
+        }
+
+        this._shield = new Shield(
+            this.scene,
+            this.x + this._shield_x,
+            this.y + this._shield_y,
+        );
+
+        this.scene.physics.world.enableBody(this._shield);
+        this._shield.setCollideWorldBounds(true);
+
+        this._shield.displayHeight = this.scale + 100;
+        this._shield.scaleX = this._shield.scaleY;
+
+        this._is_active_shild = true;
+    }
+
+    detach_shield() {
+        this._shield.destroy();
+        this._is_active_shild = false;
     }
 
     set_animations() {
@@ -236,20 +288,9 @@ export default class Player extends Phaser.Physics.Arcade.Group {
             });
         }
 
-        // if (this.lifes <= 0) {
-        //     this.player.play('destroy');
-        //     setTimeout(() => {
-        //         this.scene.scene.start('game_over-scene');
-        //         this.scene.scene.stop('hud');
-        //     }, 1500);
-        // }
-
         if (this.lifes <= 0) {
             this.player.play('destroy');
             setTimeout(() => {
-                console.log(
-                    'Olá, isto é um easter egg! E por acaso, estou agora na paragem letiva da Páscoa.',
-                );
                 if (this.scene) {
                     this.scene.scene.start('game_over-scene');
                     this.scene.scene.stop('hud');
@@ -284,5 +325,20 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
     get permission() {
         return this._weapon_stress_out;
+    }
+
+    get is_active_shield() {
+        if (this._shield) {
+            return this._is_active_shild;
+        }
+
+        return false;
+    }
+
+    get _shield_lifes() {
+        if (this._shield) {
+            return this._shield.life;
+        }
+        return 0;
     }
 }

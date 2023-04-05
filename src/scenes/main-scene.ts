@@ -19,8 +19,6 @@ export default class MainScene extends Phaser.Scene {
     constructor() {
         super('main-scene');
     }
-
-    private _is_inverted: boolean;
     private _speed: number;
     private _level: number;
     private _player: Player;
@@ -34,7 +32,6 @@ export default class MainScene extends Phaser.Scene {
     private _asteroid_factory: AsteroidFactory = new AsteroidFactory(this);
 
     init() {
-        this._is_inverted = false;
         this._speed = -200;
         this._level = 1;
     }
@@ -73,6 +70,7 @@ export default class MainScene extends Phaser.Scene {
             frameWidth: 217,
             frameHeight: 102,
         });
+        this.load.image('shield', '../assets/shield.png');
     }
 
     create() {
@@ -130,7 +128,11 @@ export default class MainScene extends Phaser.Scene {
                         );
                     }
                 } else if (item.itemType === ItemType.SCALE_PILL) {
-                    this.invertWorld();
+                    if (this._player.is_active_shield) {
+                        this._player.sheildIncrementLife();
+                    } else {
+                        this._player.attach_shield();
+                    }
                 } else {
                     this.events.emit('addScore', item.itemType);
                 }
@@ -145,10 +147,14 @@ export default class MainScene extends Phaser.Scene {
             (_, astoroid: Asteroid) => {
                 astoroid.destroyAndCollect(false);
 
-                // player leva dano
-                this.events.emit('hitPlayer', this._player.lifes);
-                this._player.take_damage();
-                this._player.is_hited = true;
+                if (!this._player.is_active_shield) {
+                    this.events.emit('hitPlayer', this._player.lifes);
+                    this._player.take_damage();
+                    this._player.is_hited = true;
+                } else {
+                    this._player.shield_take_damage();
+                }
+
                 this.cameras.main.shake(250, 0.005);
             },
             null,
@@ -167,44 +173,10 @@ export default class MainScene extends Phaser.Scene {
         );
     }
 
-    private invertWorld() {
-        const camera = this.cameras.main;
-
-        if (this._is_inverted) {
-            camera.zoomTo(-1, 1000);
-        } else {
-            camera.zoomTo(1, 1000);
-        }
-
-        this._is_inverted = !this._is_inverted;
-    }
-
-    // setUpCount() {
-    //     const { width, height } = this.scale;
-    //     const textHeight = height / 2 - 200;
-    //     var opt: string[] = ['1', '2', '3', 'Start!'];
-
-    //     // Loop para exibir a contagem regressiva
-    //     for (let i = 0; i < opt.length; i++) {
-    //         setTimeout(() => {
-    //             const text = this.add
-    //                 .text(width / 2, textHeight, opt[i], {
-    //                     fontSize: '108px',
-    //                     fontFamily: 'Days One',
-    //                 })
-    //                 .setOrigin(0.5, 0.5);
-    //             // Remove o número após 2 segundos
-    //             setTimeout(() => {
-    //                 text.destroy();
-    //             }, 1500);
-    //         }, i * 1500); // Define um atraso crescente para cada iteração
-    //     }
-    // }
-
     setUpCount() {
         const { width, height } = this.scale;
         const textHeight = height / 2 - 200;
-        const opt: string[] = ['1', '2', '3', 'Start!'];
+        const opt: string[] = ['3', '2', '1', 'Start!'];
         const timePerText: number = 1500;
 
         // Pause a cena atual
@@ -287,6 +259,12 @@ export default class MainScene extends Phaser.Scene {
         this._itemGroup.children.each((item: Item) => {
             this.physics.moveToObject(item, this._player.player_tile, 1000);
         });
+
+        this.events.emit(
+            'shieldChanged',
+            this._player._shield_lifes,
+            this._player.is_active_shield,
+        );
 
         // TODO: Retirar isto!
         this._info_text.setText([

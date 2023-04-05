@@ -39,6 +39,11 @@ export default class HudScene extends Phaser.Scene {
         this.game_scene.events.on('hitPlayer', this.hitPlayer, this);
         this.game_scene.events.on('catchLife', this.incrementLife, this);
         this.game_scene.events.on('energyChanged', this.energyChanged, this);
+        this.game_scene.events.on('shieldChanged', this.shieldChanged, this);
+    }
+
+    shieldChanged(number: number, is_active: boolean) {
+        this.displayMenu.updateShield(number, is_active);
     }
 
     energyChanged(number: number, permission: boolean = false) {
