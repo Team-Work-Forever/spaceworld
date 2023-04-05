@@ -1,4 +1,3 @@
-import { KeyBoardInput } from '../utils';
 import { background_menu_velocity } from '../config';
 
 export default class HistoryScene extends Phaser.Scene {
@@ -32,6 +31,8 @@ export default class HistoryScene extends Phaser.Scene {
         'image8',
         'image9',
     ];
+
+    private _skip: Phaser.GameObjects.Text;
 
     constructor() {
         super('history-scene');
@@ -77,6 +78,19 @@ export default class HistoryScene extends Phaser.Scene {
             .image(width / 2, height / 2 + 100, this.images[this._countImage])
             .setOrigin(0.5, 0.5)
             .setScale(0.5);
+
+        // Botão de Skip da História
+        this._skip = this.add
+            .text(width / 2 - 350, height / 2 + 75, 'Skip All', {
+                fontFamily: 'Days One',
+                fontSize: '25px',
+                color: '#FC8F2B',
+            })
+            .setInteractive();
+
+        this._skip.on('pointerdown', () => {
+            this.scene.start('main-scene');
+        });
     }
 
     addPlayer() {
