@@ -54,7 +54,7 @@ export default class StartScene extends Phaser.Scene {
             .setScale(1)
             .setInteractive()
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
-                this.scene.start('main-scene');
+                this.scene.start('history-scene');
             });
 
         new SpaceButton(

@@ -19,6 +19,7 @@ export default class MainScene extends Phaser.Scene {
     constructor() {
         super('main-scene');
     }
+
     private _speed: number;
     private _level: number;
     private _player: Player;
