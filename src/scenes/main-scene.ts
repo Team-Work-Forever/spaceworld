@@ -78,9 +78,7 @@ export default class MainScene extends Phaser.Scene {
         const { width, height } = this.scale;
 
         // Run UI
-        if (!this.scene.manager.isActive('hud')) {
-            this.scene.run('hud');
-        }
+        this.scene.run('hud');
 
         this._background = this.add
             .tileSprite(0, 0, width, height, 'background')
@@ -261,11 +259,15 @@ export default class MainScene extends Phaser.Scene {
             this.physics.moveToObject(item, this._player.player_tile, 1000);
         });
 
+        // Update Shield Bar
         this.events.emit(
             'shieldChanged',
             this._player._shield_lifes,
             this._player.is_active_shield,
         );
+
+        // Update Level
+        this.events.emit('updateLevel', this._level);
 
         // TODO: Retirar isto!
         this._info_text.setText([

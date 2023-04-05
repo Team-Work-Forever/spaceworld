@@ -73,10 +73,19 @@ export default class DisplayMenu {
             1,
             ItemType.PURPLE,
         );
+        
+        const text_display = scene.add
+            .text(-70, 50, 'Level: 1', {
+                fontFamily: 'Days One',
+                fontSize: '20px',
+            })
+            .setOrigin(0.5, 0.5);
+
 
         this._right_container.add(yellow_crystal);
         this._right_container.add(purple_crystal);
         this._right_container.add(blue_crystal);
+        this._right_container.add(text_display);
     }
 
     public updateEnergy(value: number, permission: boolean = false) {
@@ -88,6 +97,14 @@ export default class DisplayMenu {
         const shield_bar = this._bottom_left_container.getAt(0) as ShieldBar;
         shield_bar.handleEnergyChanged(value, is_active);
         shield_bar.setVisible(is_active);
+    }
+
+    public updateLevel(level: number) {
+        const level_diplay = this._right_container.getAt(
+            3,
+        ) as Phaser.GameObjects.Text;
+
+        level_diplay.text = `Level: ${Math.trunc(level).toString()}`;
     }
 
     public increaseLife(lifes: number) {

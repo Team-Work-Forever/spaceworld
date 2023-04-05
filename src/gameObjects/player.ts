@@ -290,12 +290,19 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
         if (this.lifes <= 0) {
             this.player.play('destroy');
-            setTimeout(() => {
-                if (this.scene) {
+            this.scene.time.addEvent({
+                delay: 1000,
+                callback: () => {
                     this.scene.scene.start('game_over-scene');
-                    this.scene.scene.stop('hud');
-                }
-            }, 1000);
+                    this.scene.scene.sleep('hud');
+                },
+            });
+            // setTimeout(() => {
+            //     if (this.scene) {
+            //         this.scene.scene.start('game_over-scene');
+            //     }
+            // }, 1000);
+            return;
         }
     }
 

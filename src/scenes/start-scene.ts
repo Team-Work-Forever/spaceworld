@@ -78,7 +78,7 @@ export default class StartScene extends Phaser.Scene {
             .on(
                 Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN,
                 () => {
-                    this.scene.start('game_over-scene');
+                    console.log("Go to Controllers");
                 },
                 this,
             );
