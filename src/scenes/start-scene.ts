@@ -65,7 +65,13 @@ export default class StartScene extends Phaser.Scene {
             0.7,
         )
             .setInteractive()
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {}, this);
+            .on(
+                Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN,
+                () => {
+                    this.scene.start('score-scene');
+                },
+                this,
+            );
 
         new SpaceButton(
             this,
@@ -78,7 +84,7 @@ export default class StartScene extends Phaser.Scene {
             .on(
                 Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN,
                 () => {
-                    console.log("Go to Controllers");
+                    this.scene.start('controller-scene');
                 },
                 this,
             );

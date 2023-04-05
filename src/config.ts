@@ -1,6 +1,11 @@
-import { MainScene, HudScene, StartScene } from './scenes';
-import GameOverScene from './scenes/game-over-scene';
-import HistoryScene from './scenes/history-scene';
+import {
+    MainScene,
+    StartScene,
+    ControllerScene,
+    HistoryScene,
+    GameOverScene,
+    ScoreScene,
+} from './scenes';
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
     type: Phaser.WEBGL,
@@ -11,7 +16,14 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
     scale: {
         mode: Phaser.Scale.FIT,
     },
-    scene: [StartScene, MainScene, HudScene, GameOverScene, HistoryScene],
+    scene: [
+        StartScene,
+        MainScene,
+        GameOverScene,
+        HistoryScene,
+        ControllerScene,
+        ScoreScene,
+    ],
     input: {
         keyboard: true,
     },
