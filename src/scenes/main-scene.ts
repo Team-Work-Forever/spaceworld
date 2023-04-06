@@ -83,7 +83,6 @@ export default class MainScene extends Phaser.Scene {
                 if (item.itemType === ItemType.HEART) {
                     this._player.increment_life();
                     this.events.emit('displayLifes', this._player.lifes);
-                    console.log(`More Life -> ${this._player.lifes}`);
 
                     if (this._player.lifes === player_max_lifes) {
                         const itemType: ItemType =
@@ -123,7 +122,6 @@ export default class MainScene extends Phaser.Scene {
                 if (!this._player.is_active_shield) {
                     this._player.take_damage();
                     this.events.emit('displayLifes', this._player.lifes);
-                    console.log(`Less Life -> ${this._player.lifes}`);
                     this._player.is_hited = true;
                 } else {
                     this._player.shield_take_damage();

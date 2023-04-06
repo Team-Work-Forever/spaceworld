@@ -22,6 +22,8 @@ class GameStorage {
     }
 
     public store(new_score: number) {
+        this._last_high_score = this._scores[0];
+
         if (this._scores.length >= this._max_score) {
             if (new_score <= this._scores[this._max_score - 1]) {
                 return;
@@ -30,7 +32,6 @@ class GameStorage {
             this._scores.pop();
         }
 
-        this._last_high_score = this._scores.length > 0 ? this._scores[0] : 0;
         this._scores.push(new_score);
         this._scores.sort((a, b) => b - a);
 
