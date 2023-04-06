@@ -3,6 +3,7 @@ import { background_menu_velocity } from '../config';
 
 export default class StartScene extends Phaser.Scene {
     private _background: Phaser.GameObjects.TileSprite;
+    private _background_music: Phaser.Sound.BaseSound;
 
     constructor() {
         super('start-scene');
@@ -17,6 +18,7 @@ export default class StartScene extends Phaser.Scene {
             frameWidth: 242,
             frameHeight: 211,
         });
+        this.load.audio('background-audio', '../assets/sounds/background.mp3');
     }
 
     create() {
@@ -29,6 +31,13 @@ export default class StartScene extends Phaser.Scene {
         this._background = this.add
             .tileSprite(0, 0, width, height, 'background')
             .setOrigin(0, 0);
+
+        this._background_music = this.sound.add('background-audio', {
+            loop: true,
+            volume: 0.2,
+        });
+
+        this._background_music.play();
 
         this.addEsteves(height);
 

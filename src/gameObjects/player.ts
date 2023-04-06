@@ -43,6 +43,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     // Player sounds
     private _laser_sound: Phaser.Sound.BaseSound;
     private _damage_sound: Phaser.Sound.BaseSound;
+    private _reload_sound: Phaser.Sound.BaseSound;
 
     constructor(scene: MainScene, x: number, y: number) {
         super(scene.physics.world, scene, {
@@ -106,8 +107,15 @@ export default class Player extends Phaser.Physics.Arcade.Group {
         this.player.displayHeight = this.scale;
         this.player.scaleX = this.player.scaleY;
 
-        this._laser_sound = this.scene.sound.add('laser-sound');
-        this._damage_sound = this.scene.sound.add('esteves-damage');
+        this._laser_sound = this.scene.sound.add('laser-sound', {
+            volume: 0.5,
+        });
+        this._damage_sound = this.scene.sound.add('esteves-damage', {
+            volume: 0.5,
+        });
+        this._reload_sound = this.scene.sound.add('reload-weapon', {
+            volume: 0.5,
+        });
     }
 
     attach_weapon() {
@@ -264,7 +272,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     }
 
     public preUpdate(time: number): void {
-        if (this.keyboard.cursor.space.isDown && !this._weapon_stress_out) {
+        if (this.keyboard.isFire() && !this._weapon_stress_out) {
             this.shot_lasers(time);
         }
 
@@ -280,6 +288,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
         if (this._weapon_stress_out) {
             this._weapon.play('stress', true);
+            this._reload_sound.play();
         } else {
             this._weapon.play('first');
         }

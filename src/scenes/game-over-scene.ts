@@ -9,6 +9,7 @@ export interface GameSceneProps {
 export default class GameOverScene extends Phaser.Scene {
     private _background: Phaser.GameObjects.TileSprite;
     private _current_esteves: Phaser.Physics.Arcade.Sprite;
+    private _sound: Phaser.Sound.BaseSound;
 
     constructor() {
         super('game_over-scene');
@@ -25,10 +26,20 @@ export default class GameOverScene extends Phaser.Scene {
                 frameHeight: 195,
             },
         );
+        this.load.audio('gameover-sound', ['../assets/sounds/gameover.mp3']);
+        this.load.audio('high-score', ['../assets/sounds/highscore.mp3']);
     }
 
     create(data: GameSceneProps) {
         gameStorage.store(data.score);
+
+        if (gameStorage.isNewTopScore()) {
+            this._sound = this.sound.add('high-score');
+        } else {
+            this._sound = this.sound.add('gameover-sound');
+        }
+
+        this._sound.play();
 
         const { width, height } = this.scale;
 
@@ -69,6 +80,8 @@ export default class GameOverScene extends Phaser.Scene {
         )
             .setInteractive()
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+                if (this._sound.isPlaying) this._sound.stop();
+
                 this.scene.setVisible(true, 'hud');
                 this.scene.start('main-scene');
             });
@@ -82,6 +95,8 @@ export default class GameOverScene extends Phaser.Scene {
         )
             .setInteractive()
             .on(Phaser.Input.Events.POINTER_DOWN, () => {
+                if (this._sound.isPlaying) this._sound.stop();
+
                 this.scene.start('start-scene');
             });
 

@@ -45,32 +45,26 @@ export default class HudScene extends Phaser.Scene {
 
     updateLevel(level: number) {
         this.displayMenu.updateLevel(level);
-        // console.log('HALLAND 6');
     }
 
     shieldChanged(number: number, is_active: boolean) {
         this.displayMenu.updateShield(number, is_active);
-        // console.log('HALLAND 5');
     }
 
     energyChanged(number: number, permission: boolean = false) {
         this.displayMenu.updateEnergy(number, permission);
-        // console.log('HALLAND 4');
     }
 
     incrementLife(lifes: number) {
         this.displayMenu.increaseLife(lifes);
-        console.log('HALLAND 3');
     }
 
     hitPlayer(lifes: number) {
         this.displayMenu.decreaseLife(lifes);
-        console.log('HALLAND 2');
     }
 
     add_points(itemType: ItemType, score?: number) {
         this.displayMenu.increaseScore(itemType, score);
         this.game_scene.total_score = this.displayMenu.getSumScore();
-        console.log('HALLAND 1');
     }
 }

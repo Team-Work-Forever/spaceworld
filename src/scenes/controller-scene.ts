@@ -44,17 +44,7 @@ export default class ControllerScene extends Phaser.Scene {
         });
 
         this.add
-            .image(width / 2 + 60, height / 2 + 20, 'up_down')
-            .setOrigin(0.5, 0.5)
-            .setScale(1.5);
-
-        this.add.text(width / 2 + 100, height / 2 + 10, 'or', {
-            fontFamily: 'Days One',
-            fontSize: '25px',
-        });
-
-        this.add
-            .image(width / 2 + 180, height / 2 + 20, 'mouse')
+            .image(width / 2 + 125, height / 2 + 20, 'mouse')
             .setOrigin(0.5, 0.5)
             .setScale(1.5);
 

@@ -30,7 +30,9 @@ export default class MainScene extends Phaser.Scene {
     private _asteroid_factory: AsteroidFactory = new AsteroidFactory(this);
     private _total_score: number = 0;
 
-    // Sons
+    // Sounds
+    private _count_sound: Phaser.Sound.BaseSound;
+    private _count_sound_start: Phaser.Sound.BaseSound;
     private _destroy_asteroid: Phaser.Sound.BaseSound;
     private _destroy_esteves: Phaser.Sound.BaseSound;
 
@@ -88,6 +90,9 @@ export default class MainScene extends Phaser.Scene {
         this.load.audio('esteves-destroy', [
             '../assets/sounds/estevesdestroy.mp3',
         ]);
+        this.load.audio('counter', ['../assets/sounds/counter1.mp3']);
+        this.load.audio('counter-start', ['../assets/sounds/counter2.mp3']);
+        this.load.audio('reload-weapon', ['../assets/sounds/reload.mp3']);
     }
 
     create() {
@@ -100,7 +105,7 @@ export default class MainScene extends Phaser.Scene {
             .tileSprite(0, 0, width, height, 'background')
             .setOrigin(0);
 
-        this.setUpCount();
+        this.setUpCount(1000);
 
         this._itemGroup = new ItemGroup(this, 10);
         this._itemGroup.clear(true, true);
@@ -190,7 +195,6 @@ export default class MainScene extends Phaser.Scene {
             (laser: Laser, astoroid: Asteroid) => {
                 astoroid.destroyAndCollect(true);
                 laser.destroy();
-                this._destroy_asteroid.play();
                 this.cameras.main.shake(250, 0.002);
             },
             null,
@@ -211,13 +215,14 @@ export default class MainScene extends Phaser.Scene {
         });
     }
 
-    setUpCount() {
+    setUpCount(timePerText: number) {
         const { width, height } = this.scale;
         const textHeight = height / 2 - 200;
         const opt: string[] = ['3', '2', '1', 'Start!'];
-        const timePerText: number = 1500;
 
         // Pause a cena atual
+        this._count_sound = this.sound.add('counter');
+        this._count_sound_start = this.sound.add('counter-start');
         this.scene.pause();
 
         // Loop para exibir a contagem regressiva
@@ -229,6 +234,12 @@ export default class MainScene extends Phaser.Scene {
                         fontFamily: 'Days One',
                     })
                     .setOrigin(0.5, 0.5);
+
+                if (i == opt.length - 1) {
+                    this._count_sound_start.play();
+                } else {
+                    this._count_sound.play();
+                }
                 // Remove o número após 2 segundos
                 setTimeout(() => {
                     text.destroy();

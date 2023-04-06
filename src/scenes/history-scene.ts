@@ -53,6 +53,7 @@ export default class HistoryScene extends Phaser.Scene {
         this.load.image('image7', '../assets/history/image7.png');
         this.load.image('image8', '../assets/history/image8.png');
         this.load.image('image9', '../assets/history/image9.png');
+
         this.load.spritesheet('player', '../../assets/sprite_nave.png', {
             frameWidth: 346.14,
             frameHeight: 100,

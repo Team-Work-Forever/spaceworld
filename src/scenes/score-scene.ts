@@ -4,7 +4,6 @@ import gameStorage from '../services/game-storage';
 
 export default class ScoreScene extends Phaser.Scene {
     private _background: Phaser.GameObjects.TileSprite;
-    private _max_points: number = 5;
 
     constructor() {
         super('score-scene');
@@ -65,7 +64,7 @@ export default class ScoreScene extends Phaser.Scene {
             return;
         }
 
-        for (let i = 0; i < this._max_points; i++) {
+        for (let i = 0; i < values.length; i++) {
             this.add
                 .text(
                     width / 2,
