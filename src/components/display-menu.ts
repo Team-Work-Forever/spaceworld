@@ -5,7 +5,6 @@ import { HeartBar } from './ui/heart-ui';
 import ShieldBar from './ui/shield-bar';
 
 export default class DisplayMenu {
-    private _point_to_gain: number = 1;
     private _gap: number = 130;
     private _right_container!: Phaser.GameObjects.Container;
     private _left_container!: Phaser.GameObjects.Container;
@@ -106,32 +105,13 @@ export default class DisplayMenu {
         level_diplay.text = `Level: ${Math.trunc(level).toString()}`;
     }
 
-    public increaseLife(lifes: number) {
-        (this._left_container.getAt(0) as HeartBar).increase_lifes_by_one(
-            lifes,
-        );
-    }
-
-    public decreaseLife(lifes: number) {
-        const health_bar = this._left_container.getAt(0) as HeartBar;
-        health_bar.decrease_heart(lifes);
-    }
-
     public displayScore(itemType: ItemType, score: number = 0) {
         (
             this._right_container.getAt(itemType) as CrystalContainer
         ).displayPoints(score);
     }
 
-    getSumScore(): number {
-        let sum = 0;
-
-        this._right_container.each((crystalContainer: any) => {
-            if (crystalContainer instanceof CrystalContainer) {
-                sum += (crystalContainer as CrystalContainer).getResult();
-            }
-        });
-
-        return sum;
+    public displayLifes(lifes: number) {
+        (this._left_container.getAt(0) as HeartBar).draw(lifes);
     }
 }

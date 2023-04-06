@@ -30,6 +30,8 @@ export default class MainScene extends Phaser.Scene {
 
     // Points
     private _points: number[] = [0, 0, 0]; // Blue, Yellow, Purple
+    private _points_per_crystal: number = 1;
+    private _points_per_heart: number = 10;
 
     constructor() {
         super('main-scene');
@@ -79,15 +81,18 @@ export default class MainScene extends Phaser.Scene {
                 item.destroy();
 
                 if (item.itemType === ItemType.HEART) {
-                    this.events.emit('catchLife', this._player.lifes);
                     this._player.increment_life();
+                    this.events.emit('displayLifes', this._player.lifes);
+                    console.log(`More Life -> ${this._player.lifes}`);
 
                     if (this._player.lifes === player_max_lifes) {
-                        this._points[item.itemType] += 10;
+                        const itemType: ItemType =
+                            Phaser.Math.RND.integerInRange(0, 2);
+                        this._points[itemType] += this._points_per_heart;
                         this.events.emit(
                             'displayScore',
-                            Phaser.Math.RND.integerInRange(0, 2),
-                            this._points[item.itemType],
+                            itemType,
+                            this._points[itemType],
                         );
                     }
                 } else if (item.itemType === ItemType.SCALE_PILL) {
@@ -97,7 +102,7 @@ export default class MainScene extends Phaser.Scene {
                         this._player.attach_shield();
                     }
                 } else {
-                    this._points[item.itemType]++;
+                    this._points[item.itemType] += this._points_per_crystal;
                     this.events.emit(
                         'displayScore',
                         item.itemType,
@@ -116,8 +121,9 @@ export default class MainScene extends Phaser.Scene {
                 astoroid.destroyAndCollect(false);
 
                 if (!this._player.is_active_shield) {
-                    this.events.emit('hitPlayer', this._player.lifes);
                     this._player.take_damage();
+                    this.events.emit('displayLifes', this._player.lifes);
+                    console.log(`Less Life -> ${this._player.lifes}`);
                     this._player.is_hited = true;
                 } else {
                     this._player.shield_take_damage();

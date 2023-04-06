@@ -23,29 +23,10 @@ export default class HeartBar extends Phaser.GameObjects.Container {
         this.draw(player_initial_lifes);
     }
 
-    public increase_lifes_by_one(lifes: number) {
-        lifes++;
-        if (lifes > player_initial_lifes) {
-            this._heart_group.create(0, 0, 'heart');
-        }
-
-        this.draw(lifes);
-    }
-
-    public decrease_heart(lifes: number) {
-        lifes--;
-        const last_heart = this._heart_group.getLast(true);
-
-        if (this._heart_group.getLength() > player_initial_lifes) {
-            this._heart_group.remove(last_heart, true, true);
-        }
-
-        this.draw(lifes);
-    }
-
-    private draw(lifes: number) {
+    public draw(lifes: number) {
         let count: number = 0;
-        this.removeAll();
+        this.cleanHearts();
+        this.createHearts(lifes);
 
         this._heart_group.children.each(
             (heart: Phaser.Physics.Arcade.Sprite) => {
@@ -61,5 +42,23 @@ export default class HeartBar extends Phaser.GameObjects.Container {
                 count += this._grap;
             },
         );
+    }
+
+    private cleanHearts() {
+        this._heart_group.children.each(
+            (heart: Phaser.Physics.Arcade.Sprite) => {
+                this.remove(heart);
+                this._heart_group.remove(heart, true);
+            },
+        );
+    }
+
+    private createHearts(lifes: number) {
+        let count: number =
+            lifes > player_initial_lifes ? lifes : player_initial_lifes;
+
+        for (let i = 0; i < count; i++) {
+            this._heart_group.create(0, 0, 'heart');
+        }
     }
 }
