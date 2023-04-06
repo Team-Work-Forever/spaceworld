@@ -27,7 +27,9 @@ export default class MainScene extends Phaser.Scene {
     private _background: Phaser.GameObjects.TileSprite;
 
     private _asteroid_factory: AsteroidFactory = new AsteroidFactory(this);
-    private _total_score: number = 0;
+
+    // Points
+    private _points: number[] = [0, 0, 0]; // Blue, Yellow, Purple
 
     constructor() {
         super('main-scene');
@@ -36,13 +38,15 @@ export default class MainScene extends Phaser.Scene {
     init() {
         this._speed = -200;
         this._level = 1;
+        this._points = [0, 0, 0];
     }
 
     create() {
         const { width, height } = this.scale;
 
         // Run UI
-        this.scene.run('hud');
+        this.scene.launch('hud');
+        this.scene.bringToTop('hud');
 
         this._background = this.add
             .tileSprite(0, 0, width, height, 'background')
@@ -79,10 +83,11 @@ export default class MainScene extends Phaser.Scene {
                     this._player.increment_life();
 
                     if (this._player.lifes === player_max_lifes) {
+                        this._points[item.itemType] += 10;
                         this.events.emit(
-                            'addScore',
+                            'displayScore',
                             Phaser.Math.RND.integerInRange(0, 2),
-                            10,
+                            this._points[item.itemType],
                         );
                     }
                 } else if (item.itemType === ItemType.SCALE_PILL) {
@@ -92,7 +97,12 @@ export default class MainScene extends Phaser.Scene {
                         this._player.attach_shield();
                     }
                 } else {
-                    this.events.emit('addScore', item.itemType);
+                    this._points[item.itemType]++;
+                    this.events.emit(
+                        'displayScore',
+                        item.itemType,
+                        this._points[item.itemType],
+                    );
                 }
             },
             null,
@@ -143,12 +153,23 @@ export default class MainScene extends Phaser.Scene {
         this.time.addEvent({
             delay: 1000,
             callback: () => {
-                this.scene.setVisible(false, 'hud');
+                // this.scene.setVisible(false, 'hud');
+                this.scene.sendToBack('hud');
                 this.scene.start('game_over-scene', {
-                    score: Math.trunc(this._level) * this._total_score,
+                    score: Math.trunc(this._level) * this.getTotalPoints(),
                 } as GameSceneProps);
             },
         });
+    }
+
+    private getTotalPoints(): number {
+        let sum = 0;
+
+        for (let i = 0; i < this._points.length; i++) {
+            sum += this._points[i];
+        }
+
+        return sum;
     }
 
     setUpCount(timePerText: number) {
@@ -234,9 +255,5 @@ export default class MainScene extends Phaser.Scene {
 
         // Update Level
         this.events.emit('updateLevel', this._level);
-    }
-
-    set total_score(score: number) {
-        this._total_score = score;
     }
 }

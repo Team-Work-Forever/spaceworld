@@ -117,10 +117,10 @@ export default class DisplayMenu {
         health_bar.decrease_heart(lifes);
     }
 
-    public increaseScore(itemType: ItemType, score: number = 0) {
-        (this._right_container.getAt(itemType) as CrystalContainer).increment(
-            this._point_to_gain + score,
-        );
+    public displayScore(itemType: ItemType, score: number = 0) {
+        (
+            this._right_container.getAt(itemType) as CrystalContainer
+        ).displayPoints(score);
     }
 
     getSumScore(): number {

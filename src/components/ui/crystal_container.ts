@@ -26,9 +26,8 @@ export default class CrystalContainer extends Phaser.GameObjects.Container {
         this.add(icon);
     }
 
-    public increment(qty: number) {
-        const sum = parseInt(this._score.text) + qty;
-        this._score.setText(sum.toString());
+    public displayPoints(qty: number) {
+        this._score.setText(qty.toString());
     }
 
     getResult() {

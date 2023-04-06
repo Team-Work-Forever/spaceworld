@@ -58,7 +58,6 @@ export class AsteroidFactory {
             }
         }
 
-        // Se der erro é capaz ser isto
         return this.createRandom(x, y);
     }
 }

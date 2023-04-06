@@ -16,12 +16,12 @@ export default class HudScene extends Phaser.Scene {
         this.game_scene = this.scene.get('main-scene') as MainScene;
 
         // Events
-        this.game_scene.events.on('addScore', this.add_points, this);
         this.game_scene.events.on('hitPlayer', this.hitPlayer, this);
         this.game_scene.events.on('catchLife', this.incrementLife, this);
         this.game_scene.events.on('energyChanged', this.energyChanged, this);
         this.game_scene.events.on('shieldChanged', this.shieldChanged, this);
         this.game_scene.events.on('updateLevel', this.updateLevel, this);
+        this.game_scene.events.on('displayScore', this.displayScore, this);
     }
 
     updateLevel(level: number) {
@@ -44,8 +44,7 @@ export default class HudScene extends Phaser.Scene {
         this.displayMenu.decreaseLife(lifes);
     }
 
-    add_points(itemType: ItemType, score?: number) {
-        this.displayMenu.increaseScore(itemType, score);
-        this.game_scene.total_score = this.displayMenu.getSumScore();
+    displayScore(itemType: ItemType, score: number) {
+        this.displayMenu.displayScore(itemType, score);
     }
 }
