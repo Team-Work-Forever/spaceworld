@@ -14,7 +14,7 @@ export default class HeartBar extends Phaser.GameObjects.Container {
             key: 'heart',
         });
 
-        // Define 3 corações
+        // Define 3 hearts
         this._heart_group.createMultiple({
             frameQuantity: player_initial_lifes - 1,
             key: 'heart',

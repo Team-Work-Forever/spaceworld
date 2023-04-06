@@ -35,7 +35,7 @@ export class Asteroid extends Phaser.Physics.Arcade.Sprite {
 
     protected setExplode(): void {}
 
-    // TODO: Drop Item
+    // Drop Item
     destroyAndCollect(is_heart: boolean = false): void {
         this.play('explode-' + this.sprite);
 

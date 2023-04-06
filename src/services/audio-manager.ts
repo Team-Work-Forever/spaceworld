@@ -16,7 +16,7 @@ export default class AudioManager {
     private _reload_sound: Phaser.Sound.BaseSound;
     private _over_heat: Phaser.Sound.BaseSound;
 
-    // count
+    // Count
     private _counter: Phaser.Sound.BaseSound;
     private _counter_start: Phaser.Sound.BaseSound;
 

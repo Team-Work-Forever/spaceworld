@@ -40,8 +40,6 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     private _weapon: Phaser.Physics.Arcade.Sprite;
     private _laser_group: LaserGroup;
 
-    // Player sounds
-
     constructor(scene: MainScene, x: number, y: number) {
         super(scene.physics.world, scene, {
             collideWorldBounds: true,

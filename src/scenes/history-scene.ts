@@ -62,7 +62,7 @@ export default class HistoryScene extends Phaser.Scene {
             .setOrigin(0.5, 0.5)
             .setScale(0.5);
 
-        // Botão de Skip da História
+        // Button Skip História
         this._skip = this.add
             .text(width / 2 - 350, height / 2 + 75, 'Skip All', {
                 fontFamily: 'Days One',

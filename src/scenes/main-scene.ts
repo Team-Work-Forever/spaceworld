@@ -1,4 +1,4 @@
-import Phaser, { GameObjects } from 'phaser';
+import Phaser from 'phaser';
 import {
     AsteroidFactory,
     AsteroidGroup,
@@ -25,8 +25,6 @@ export default class MainScene extends Phaser.Scene {
     public _asteroidGroup: AsteroidGroup;
     private timer: any;
     private _background: Phaser.GameObjects.TileSprite;
-
-    private _info_text: GameObjects.Text;
 
     private _asteroid_factory: AsteroidFactory = new AsteroidFactory(this);
     private _total_score: number = 0;
@@ -67,14 +65,9 @@ export default class MainScene extends Phaser.Scene {
             loop: true,
         });
 
-        // UI
-        this._info_text = this.add.text(0, 0, 'itemType', {
-            color: '#00ff00',
-        });
-
         // Collisions
 
-        // Apanha o item
+        // Collect item
         this.physics.add.overlap(
             this._player,
             this._itemGroup,
@@ -105,7 +98,7 @@ export default class MainScene extends Phaser.Scene {
             null,
         );
 
-        // Player colide com os asteroides
+        // Player colide with asteroids
         this.physics.add.overlap(
             this._player,
             this._asteroidGroup,
@@ -131,7 +124,7 @@ export default class MainScene extends Phaser.Scene {
             null,
         );
 
-        // Laser colide com asteroid
+        // Laser colide with asteroid
         this.physics.add.overlap(
             this._player.laser_group,
             this._asteroidGroup,
@@ -163,10 +156,10 @@ export default class MainScene extends Phaser.Scene {
         const textHeight = height / 2 - 200;
         const opt: string[] = ['3', '2', '1', 'Start!'];
 
-        // Pause a cena atual
+        // Pause atual scene
         this.scene.pause();
 
-        // Loop para exibir a contagem regressiva
+        // Loop to countdown
         for (let i = 0; i < opt.length; i++) {
             setTimeout(() => {
                 const text = this.add
@@ -181,11 +174,11 @@ export default class MainScene extends Phaser.Scene {
                 } else {
                     audioManager.playStartCounter();
                 }
-                // Remove o número após 2 segundos
+                // Remove number after 2 seconds
                 setTimeout(() => {
                     text.destroy();
                 }, timePerText - 100);
-            }, i * timePerText); // Define um atraso crescente para cada iteração
+            }, i * timePerText); // Define delay
         }
 
         setTimeout(() => {
@@ -194,32 +187,14 @@ export default class MainScene extends Phaser.Scene {
     }
 
     spawnAsteroids() {
-        const randomY = Phaser.Math.Between(50, 750);
-        const objectType = Phaser.Math.Between(1, 3);
+        const randomY = Phaser.Math.Between(50, window.innerHeight - 50);
         const scale = Phaser.Math.Between(50, 150);
         let object: Asteroid;
 
-        //Melhorar isto!
-        switch (objectType) {
-            case 1:
-                object = this._asteroid_factory.createBlueAsteroid(
-                    window.innerWidth + 150,
-                    randomY,
-                );
-                break;
-            case 2:
-                object = this._asteroid_factory.createYellowAsteroid(
-                    window.innerWidth + 150,
-                    randomY,
-                );
-                break;
-            case 3:
-                object = this._asteroid_factory.createPurpleAsteroid(
-                    window.innerWidth + 150,
-                    randomY,
-                );
-                break;
-        }
+        object = this._asteroid_factory.createRandom(
+            window.innerWidth + 150,
+            randomY,
+        );
 
         this._asteroidGroup.add(object);
 
@@ -245,7 +220,7 @@ export default class MainScene extends Phaser.Scene {
             this._player.permission,
         );
 
-        // Recolher items
+        // Collect items
         this._itemGroup.children.each((item: Item) => {
             this.physics.moveToObject(item, this._player.player_tile, 1000);
         });
@@ -259,26 +234,6 @@ export default class MainScene extends Phaser.Scene {
 
         // Update Level
         this.events.emit('updateLevel', this._level);
-
-        // TODO: Retirar isto!
-        this._info_text.setText([
-            'Used: ',
-            this._player.laser_group.getTotalUsed().toString(),
-            'Free: ',
-            this._player.laser_group.getTotalFree().toString(),
-            'Used -> Asteroids: ',
-            this._asteroidGroup.getTotalUsed().toString(),
-            'Free -> Asteroids: ',
-            this._asteroidGroup.getTotalFree().toString(),
-            'Weapon Stress: ',
-            this._player.weapon_stress.toString(),
-            'Lifes: ',
-            this._player.lifes.toString(),
-            'Permition: ',
-            this._player.permission.toString(),
-            'Asteroid_velocity: ',
-            this._level.toString(),
-        ]);
     }
 
     set total_score(score: number) {
