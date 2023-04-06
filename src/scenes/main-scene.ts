@@ -14,12 +14,9 @@ import {
     increment_velocity_asteroids,
     player_max_lifes,
 } from '../config';
+import { GameSceneProps } from './game-over-scene';
 
 export default class MainScene extends Phaser.Scene {
-    constructor() {
-        super('main-scene');
-    }
-
     private _speed: number;
     private _level: number;
     private _player: Player;
@@ -31,6 +28,11 @@ export default class MainScene extends Phaser.Scene {
     private _info_text: GameObjects.Text;
 
     private _asteroid_factory: AsteroidFactory = new AsteroidFactory(this);
+    private _total_score: number = 0;
+
+    constructor() {
+        super('main-scene');
+    }
 
     init() {
         this._speed = -200;
@@ -154,6 +156,10 @@ export default class MainScene extends Phaser.Scene {
                     this._player.shield_take_damage();
                 }
 
+                if (this._player.lifes <= 0) {
+                    this.gameover();
+                }
+
                 this.cameras.main.shake(250, 0.005);
             },
             null,
@@ -170,6 +176,19 @@ export default class MainScene extends Phaser.Scene {
             },
             null,
         );
+    }
+
+    private gameover() {
+        this._player.player_tile.play('destroy');
+        this.time.addEvent({
+            delay: 1000,
+            callback: () => {
+                this.scene.setVisible(false, 'hud');
+                this.scene.start('game_over-scene', {
+                    score: Math.trunc(this._level) * this._total_score,
+                } as GameSceneProps);
+            },
+        });
     }
 
     setUpCount() {
@@ -288,5 +307,9 @@ export default class MainScene extends Phaser.Scene {
             'Asteroid_velocity: ',
             this._level.toString(),
         ]);
+    }
+
+    set total_score(score: number) {
+        this._total_score = score;
     }
 }

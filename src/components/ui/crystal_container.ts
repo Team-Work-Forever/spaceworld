@@ -30,4 +30,8 @@ export default class CrystalContainer extends Phaser.GameObjects.Container {
         const sum = parseInt(this._score.text) + qty;
         this._score.setText(sum.toString());
     }
+
+    getResult() {
+        return parseInt(this._score.text);
+    }
 }

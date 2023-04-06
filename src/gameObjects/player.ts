@@ -287,17 +287,6 @@ export default class Player extends Phaser.Physics.Arcade.Group {
                 },
             });
         }
-
-        if (this.lifes <= 0) {
-            this.player.play('destroy');
-            this.scene.time.addEvent({
-                delay: 1000,
-                callback: () => {
-                    this.scene.scene.setVisible(false, 'hud');
-                    this.scene.scene.start('game_over-scene');
-                },
-            });
-        }
     }
 
     get player_tile() {

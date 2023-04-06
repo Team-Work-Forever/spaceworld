@@ -1,5 +1,10 @@
 import SpaceButton from '../components/ui/space-button';
 import { background_menu_velocity } from '../config';
+import gameStorage from '../services/game-storage';
+
+export interface GameSceneProps {
+    score: number;
+}
 
 export default class GameOverScene extends Phaser.Scene {
     private _background: Phaser.GameObjects.TileSprite;
@@ -22,7 +27,9 @@ export default class GameOverScene extends Phaser.Scene {
         );
     }
 
-    create() {
+    create(data: GameSceneProps) {
+        gameStorage.store(data.score);
+
         const { width, height } = this.scale;
 
         const textHeight = height / 2 - 200;
@@ -39,6 +46,18 @@ export default class GameOverScene extends Phaser.Scene {
                 fontSize: '80px',
                 fontFamily: 'Days One',
             })
+            .setOrigin(0.5, 0.5);
+
+        this.add
+            .text(
+                width / 2,
+                textHeight + 150,
+                `Score: ${Math.round(data.score).toString()} Points`,
+                {
+                    fontSize: '25px',
+                    fontFamily: 'Days One',
+                },
+            )
             .setOrigin(0.5, 0.5);
 
         new SpaceButton(

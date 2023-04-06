@@ -73,14 +73,13 @@ export default class DisplayMenu {
             1,
             ItemType.PURPLE,
         );
-        
+
         const text_display = scene.add
             .text(-70, 50, 'Level: 1', {
                 fontFamily: 'Days One',
                 fontSize: '20px',
             })
             .setOrigin(0.5, 0.5);
-
 
         this._right_container.add(yellow_crystal);
         this._right_container.add(purple_crystal);
@@ -122,5 +121,17 @@ export default class DisplayMenu {
         (this._right_container.getAt(itemType) as CrystalContainer).increment(
             this._point_to_gain + score,
         );
+    }
+
+    getSumScore(): number {
+        let sum = 0;
+
+        this._right_container.each((crystalContainer: any) => {
+            if (crystalContainer instanceof CrystalContainer) {
+                sum += (crystalContainer as CrystalContainer).getResult();
+            }
+        });
+
+        return sum;
     }
 }
