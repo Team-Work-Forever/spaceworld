@@ -38,6 +38,10 @@ export default class HistoryScene extends Phaser.Scene {
         super('history-scene');
     }
 
+    init() {
+        this._countImage = 0;
+    }
+
     preload() {
         this.load.image('background', '../assets/background.png');
         this.load.image('image1', '../assets/history/image1.png');
@@ -139,7 +143,6 @@ export default class HistoryScene extends Phaser.Scene {
                 // Check if it's the last image
                 if (this._countImage === this.images.length - 1) {
                     this.scene.start('main-scene');
-                    this._countImage = 0;
                 } else {
                     this._countImage++;
                     this.image.setTexture(this.images[this._countImage]);
