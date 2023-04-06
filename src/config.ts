@@ -5,6 +5,7 @@ import {
     HistoryScene,
     GameOverScene,
     ScoreScene,
+    HudScene,
 } from './scenes';
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
@@ -22,6 +23,7 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
         GameOverScene,
         HistoryScene,
         ControllerScene,
+        HudScene,
         ScoreScene,
     ],
     input: {

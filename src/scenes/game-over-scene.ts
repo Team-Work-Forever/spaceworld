@@ -50,6 +50,7 @@ export default class GameOverScene extends Phaser.Scene {
         )
             .setInteractive()
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+                this.scene.setVisible(true, 'hud');
                 this.scene.start('main-scene');
             });
 

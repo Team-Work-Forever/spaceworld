@@ -35,14 +35,14 @@ export default class StartScene extends Phaser.Scene {
         // Display's the right menu
         this.add
             .text(width / 2, textHeigh, 'Space World', {
-                fontSize: '42px',
+                fontSize: '84px',
                 fontFamily: 'Days One',
             })
             .setOrigin(0.5, 0.5);
 
         this.add
-            .text(width / 2, textHeigh + 45, 'Peanuts War', {
-                fontSize: '24px',
+            .text(width / 2, textHeigh + 65, 'Peanuts War', {
+                fontSize: '42px',
                 color: '#FC8F2B',
                 fontFamily: 'Days One',
             })
