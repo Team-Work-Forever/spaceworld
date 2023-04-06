@@ -42,28 +42,6 @@ export default class HistoryScene extends Phaser.Scene {
         this._countImage = 0;
     }
 
-    preload() {
-        this.load.image('background', '../assets/background.png');
-        this.load.image('image1', '../assets/history/image1.png');
-        this.load.image('image2', '../assets/history/image2.png');
-        this.load.image('image3', '../assets/history/image3.png');
-        this.load.image('image4', '../assets/history/image4.png');
-        this.load.image('image5', '../assets/history/image5.png');
-        this.load.image('image6', '../assets/history/image6.png');
-        this.load.image('image7', '../assets/history/image7.png');
-        this.load.image('image8', '../assets/history/image8.png');
-        this.load.image('image9', '../assets/history/image9.png');
-
-        this.load.spritesheet('player', '../../assets/sprite_nave.png', {
-            frameWidth: 346.14,
-            frameHeight: 100,
-        });
-        this.load.spritesheet('weapon', '../../assets/weapon.png', {
-            frameWidth: 217,
-            frameHeight: 102,
-        });
-    }
-
     create() {
         const { width, height } = this.scale;
 

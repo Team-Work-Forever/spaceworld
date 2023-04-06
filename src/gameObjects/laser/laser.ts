@@ -1,4 +1,4 @@
-import game from '../../game';
+import { game } from '../../game';
 
 export default class Laser extends Phaser.Physics.Arcade.Sprite {
     private max_speed: number = 1500;

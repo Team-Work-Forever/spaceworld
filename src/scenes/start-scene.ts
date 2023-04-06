@@ -3,22 +3,9 @@ import { background_menu_velocity } from '../config';
 
 export default class StartScene extends Phaser.Scene {
     private _background: Phaser.GameObjects.TileSprite;
-    private _background_music: Phaser.Sound.BaseSound;
 
     constructor() {
         super('start-scene');
-    }
-
-    init() {}
-
-    preload() {
-        this.load.image('background', '../assets/background.png');
-        this.load.image('spacebutton', '../assets/ui/space_button.png');
-        this.load.spritesheet('esteves-adv', '../assets/ui/steves_adv.png', {
-            frameWidth: 242,
-            frameHeight: 211,
-        });
-        this.load.audio('background-audio', '../assets/sounds/background.mp3');
     }
 
     create() {
@@ -31,13 +18,6 @@ export default class StartScene extends Phaser.Scene {
         this._background = this.add
             .tileSprite(0, 0, width, height, 'background')
             .setOrigin(0, 0);
-
-        this._background_music = this.sound.add('background-audio', {
-            loop: true,
-            volume: 0.2,
-        });
-
-        this._background_music.play();
 
         this.addEsteves(height);
 

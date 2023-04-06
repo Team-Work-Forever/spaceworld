@@ -8,14 +8,6 @@ export default class ControllerScene extends Phaser.Scene {
         super('controller-scene');
     }
 
-    preload() {
-        this.load.image('background', '../assets/background.png');
-        this.load.image('spacebutton', '../assets/ui/space_button.png');
-        this.load.image('space', '../assets/comands/space_button.png');
-        this.load.image('up_down', '../assets/comands/up_down_keys.png');
-        this.load.image('mouse', '../assets/comands/mouse.png');
-    }
-
     create() {
         const { width, height } = this.scale;
 

@@ -15,6 +15,7 @@ import {
     player_max_lifes,
 } from '../config';
 import { GameSceneProps } from './game-over-scene';
+import { audioManager } from '../game';
 
 export default class MainScene extends Phaser.Scene {
     private _speed: number;
@@ -30,12 +31,6 @@ export default class MainScene extends Phaser.Scene {
     private _asteroid_factory: AsteroidFactory = new AsteroidFactory(this);
     private _total_score: number = 0;
 
-    // Sounds
-    private _count_sound: Phaser.Sound.BaseSound;
-    private _count_sound_start: Phaser.Sound.BaseSound;
-    private _destroy_asteroid: Phaser.Sound.BaseSound;
-    private _destroy_esteves: Phaser.Sound.BaseSound;
-
     constructor() {
         super('main-scene');
     }
@@ -43,56 +38,6 @@ export default class MainScene extends Phaser.Scene {
     init() {
         this._speed = -200;
         this._level = 1;
-    }
-
-    preload() {
-        this.load.image('background', '../assets/background.png');
-        this.load.image('bullet', '../assets/bullet.png');
-        this.load.spritesheet('item', '../../assets/item.png', {
-            frameWidth: 18.25,
-            frameHeight: 33,
-        });
-        this.load.spritesheet('items', '../../assets/items-menu.png', {
-            frameWidth: 57,
-            frameHeight: 98,
-        });
-        this.load.spritesheet(
-            'blue_asteroid',
-            '../../assets/blue_asteroid.png',
-            { frameWidth: 101.98, frameHeight: 100 },
-        );
-        this.load.spritesheet(
-            'purple_asteroid',
-            '../../assets/asteroid_purple_sprite.png',
-            { frameWidth: 125.9, frameHeight: 59 },
-        );
-        this.load.spritesheet(
-            'yellow_asteroid',
-            '../../assets/yellow_asteroid_sprite.png',
-            { frameWidth: 112, frameHeight: 53 },
-        );
-        this.load.spritesheet('player', '../../assets/sprite_nave.png', {
-            frameWidth: 346.14,
-            frameHeight: 100,
-        });
-        this.load.spritesheet('weapon', '../../assets/weapon.png', {
-            frameWidth: 217,
-            frameHeight: 102,
-        });
-        this.load.image('shield', '../assets/shield.png');
-        this.load.audio('laser-sound', ['../assets/sounds/laser.mp3']);
-        this.load.audio('esteves-damage', [
-            '../assets/sounds/estevesdamage.mp3',
-        ]);
-        this.load.audio('destroy-asteroid', [
-            '../assets/sounds/destroyasteroid.mp3',
-        ]);
-        this.load.audio('esteves-destroy', [
-            '../assets/sounds/estevesdestroy.mp3',
-        ]);
-        this.load.audio('counter', ['../assets/sounds/counter1.mp3']);
-        this.load.audio('counter-start', ['../assets/sounds/counter2.mp3']);
-        this.load.audio('reload-weapon', ['../assets/sounds/reload.mp3']);
     }
 
     create() {
@@ -113,8 +58,6 @@ export default class MainScene extends Phaser.Scene {
         this._asteroidGroup = new AsteroidGroup(this, 100);
 
         this._player = new Player(this, 200, this.input.mousePointer.y);
-        this._destroy_asteroid = this.sound.add('destroy-asteroid');
-        this._destroy_esteves = this.sound.add('esteves-destroy');
 
         // Setup Timer
         this.timer = this.time.addEvent({
@@ -181,7 +124,7 @@ export default class MainScene extends Phaser.Scene {
                     this.gameover();
                 }
 
-                this._destroy_asteroid.play();
+                audioManager.playDestroyAsteroid();
 
                 this.cameras.main.shake(250, 0.005);
             },
@@ -203,7 +146,7 @@ export default class MainScene extends Phaser.Scene {
 
     private gameover() {
         this._player.player_tile.play('destroy');
-        this._destroy_esteves.play();
+        audioManager.playDestroyAsteroid();
         this.time.addEvent({
             delay: 1000,
             callback: () => {
@@ -221,8 +164,6 @@ export default class MainScene extends Phaser.Scene {
         const opt: string[] = ['3', '2', '1', 'Start!'];
 
         // Pause a cena atual
-        this._count_sound = this.sound.add('counter');
-        this._count_sound_start = this.sound.add('counter-start');
         this.scene.pause();
 
         // Loop para exibir a contagem regressiva
@@ -236,9 +177,9 @@ export default class MainScene extends Phaser.Scene {
                     .setOrigin(0.5, 0.5);
 
                 if (i == opt.length - 1) {
-                    this._count_sound_start.play();
+                    audioManager.playSingleCounter();
                 } else {
-                    this._count_sound.play();
+                    audioManager.playStartCounter();
                 }
                 // Remove o número após 2 segundos
                 setTimeout(() => {

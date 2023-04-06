@@ -6,6 +6,7 @@ import {
     GameOverScene,
     ScoreScene,
     HudScene,
+    LoadScene,
 } from './scenes';
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
@@ -18,6 +19,7 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
         mode: Phaser.Scale.FIT,
     },
     scene: [
+        LoadScene,
         StartScene,
         MainScene,
         GameOverScene,

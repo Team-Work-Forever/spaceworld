@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameConfig } from './config';
+import AudioManager from './services/audio-manager';
 
 export class Game extends Phaser.Game {
     constructor(config: Phaser.Types.Core.GameConfig) {
@@ -7,10 +8,12 @@ export class Game extends Phaser.Game {
     }
 }
 
-// var game: Phaser.Game;
+var game: Phaser.Game;
+var audioManager: AudioManager;
 
-// window.addEventListener('load', () => {
-//     //game = new Phaser.Game(GameConfig);
-// });
+window.addEventListener('load', () => {
+    game = new Phaser.Game(GameConfig);
+    audioManager = new AudioManager(game);
+});
 
-export default new Phaser.Game(GameConfig);
+export { game, audioManager };

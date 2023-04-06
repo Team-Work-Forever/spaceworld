@@ -1,6 +1,7 @@
 import SpaceButton from '../components/ui/space-button';
 import { background_menu_velocity } from '../config';
 import gameStorage from '../services/game-storage';
+import { audioManager } from '../game';
 
 export interface GameSceneProps {
     score: number;
@@ -9,37 +10,19 @@ export interface GameSceneProps {
 export default class GameOverScene extends Phaser.Scene {
     private _background: Phaser.GameObjects.TileSprite;
     private _current_esteves: Phaser.Physics.Arcade.Sprite;
-    private _sound: Phaser.Sound.BaseSound;
 
     constructor() {
         super('game_over-scene');
     }
 
-    preload() {
-        this.load.image('background', '../assets/background.png');
-        this.load.image('spacebutton', '../assets/ui/space_button.png');
-        this.load.spritesheet(
-            'thats_how_we_roll',
-            '../assets/ui/spining_esteves.png',
-            {
-                frameWidth: 209,
-                frameHeight: 195,
-            },
-        );
-        this.load.audio('gameover-sound', ['../assets/sounds/gameover.mp3']);
-        this.load.audio('high-score', ['../assets/sounds/highscore.mp3']);
-    }
-
     create(data: GameSceneProps) {
         gameStorage.store(data.score);
 
-        if (gameStorage.isNewTopScore()) {
-            this._sound = this.sound.add('high-score');
+        if (gameStorage.isNewTopScore(data.score)) {
+            audioManager.playHighScore();
         } else {
-            this._sound = this.sound.add('gameover-sound');
+            audioManager.playGameOver();
         }
-
-        this._sound.play();
 
         const { width, height } = this.scale;
 
@@ -80,7 +63,7 @@ export default class GameOverScene extends Phaser.Scene {
         )
             .setInteractive()
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
-                if (this._sound.isPlaying) this._sound.stop();
+                audioManager.stopGameOver();
 
                 this.scene.setVisible(true, 'hud');
                 this.scene.start('main-scene');
@@ -95,7 +78,7 @@ export default class GameOverScene extends Phaser.Scene {
         )
             .setInteractive()
             .on(Phaser.Input.Events.POINTER_DOWN, () => {
-                if (this._sound.isPlaying) this._sound.stop();
+                audioManager.stopGameOver();
 
                 this.scene.start('start-scene');
             });

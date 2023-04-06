@@ -3,7 +3,7 @@ import MainScene from '../scenes/main-scene';
 import LaserGroup from './laser/laser-group';
 import Laser from './laser/laser';
 import { player_initial_lifes, player_max_lifes } from '../config';
-import game from '../game';
+import { game, audioManager } from '../game';
 import { KeyBoardInput } from '../utils';
 import Shield from './shield';
 
@@ -41,9 +41,6 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     private _laser_group: LaserGroup;
 
     // Player sounds
-    private _laser_sound: Phaser.Sound.BaseSound;
-    private _damage_sound: Phaser.Sound.BaseSound;
-    private _reload_sound: Phaser.Sound.BaseSound;
 
     constructor(scene: MainScene, x: number, y: number) {
         super(scene.physics.world, scene, {
@@ -106,16 +103,6 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
         this.player.displayHeight = this.scale;
         this.player.scaleX = this.player.scaleY;
-
-        this._laser_sound = this.scene.sound.add('laser-sound', {
-            volume: 0.5,
-        });
-        this._damage_sound = this.scene.sound.add('esteves-damage', {
-            volume: 0.5,
-        });
-        this._reload_sound = this.scene.sound.add('reload-weapon', {
-            volume: 0.5,
-        });
     }
 
     attach_weapon() {
@@ -245,7 +232,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
         if (this.lifes > 0) {
             this._lifes--;
         }
-        this._damage_sound.play();
+        audioManager.playTakeDamege();
     }
 
     // Shot Layers
@@ -266,7 +253,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
                 this.last = time + 150;
                 this._weapon_stress += 10;
                 this._weapon.play('idle', true);
-                this._laser_sound.play();
+                audioManager.playLaserSound();
             }
         }
     }
@@ -288,9 +275,10 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
         if (this._weapon_stress_out) {
             this._weapon.play('stress', true);
-            this._reload_sound.play();
+            audioManager.playReloadSound();
         } else {
             this._weapon.play('first');
+            audioManager.playOverHeat();
         }
 
         if (!this.is_hited) {

@@ -1,7 +1,7 @@
 class GameStorage {
     private _scores: number[];
     private _max_score: number = 5;
-    private _last_high_score: number;
+    private _last_high_score: number = 0;
 
     constructor() {
         this._scores = this.getAll();
@@ -17,12 +17,8 @@ class GameStorage {
         return [];
     }
 
-    public isNewTopScore(): boolean {
-        console.log(this._scores.length);
-
-        return this._scores.length > 0
-            ? this._last_high_score < this._scores.indexOf(0)
-            : true;
+    public isNewTopScore(top: number): boolean {
+        return this._scores.length > 1 ? this._last_high_score < top : true;
     }
 
     public store(new_score: number) {
@@ -34,11 +30,9 @@ class GameStorage {
             this._scores.pop();
         }
 
-        this._last_high_score = this._scores.indexOf(0);
+        this._last_high_score = this._scores.length > 0 ? this._scores[0] : 0;
         this._scores.push(new_score);
         this._scores.sort((a, b) => b - a);
-        console.log(this._last_high_score);
-        console.log(new_score);
 
         localStorage.setItem('score', JSON.stringify(this._scores));
     }

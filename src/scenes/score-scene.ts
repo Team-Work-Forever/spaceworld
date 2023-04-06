@@ -9,11 +9,6 @@ export default class ScoreScene extends Phaser.Scene {
         super('score-scene');
     }
 
-    preload() {
-        this.load.image('background', '../assets/background.png');
-        this.load.image('spacebutton', '../assets/ui/space_button.png');
-    }
-
     create() {
         const { width, height } = this.scale;
 
