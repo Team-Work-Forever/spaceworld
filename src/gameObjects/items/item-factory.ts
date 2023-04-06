@@ -15,13 +15,13 @@ export default class ItemFactory {
     private _main_scene: MainScene;
     private _probability: Prob[] = [
         {
-            probability: 0.6,
+            probability: 0.75, // Item Normal
         },
         {
-            probability: 0.15,
+            probability: 0.15, // Heart
         },
         {
-            probability: 0.15,
+            probability: 0.1, // Shield
         },
     ];
 
