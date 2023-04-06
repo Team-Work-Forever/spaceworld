@@ -40,6 +40,10 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     private _weapon: Phaser.Physics.Arcade.Sprite;
     private _laser_group: LaserGroup;
 
+    // Player sounds
+    private _laser_sound: Phaser.Sound.BaseSound;
+    private _damage_sound: Phaser.Sound.BaseSound;
+
     constructor(scene: MainScene, x: number, y: number) {
         super(scene.physics.world, scene, {
             collideWorldBounds: true,
@@ -101,6 +105,9 @@ export default class Player extends Phaser.Physics.Arcade.Group {
 
         this.player.displayHeight = this.scale;
         this.player.scaleX = this.player.scaleY;
+
+        this._laser_sound = this.scene.sound.add('laser-sound');
+        this._damage_sound = this.scene.sound.add('esteves-damage');
     }
 
     attach_weapon() {
@@ -230,6 +237,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
         if (this.lifes > 0) {
             this._lifes--;
         }
+        this._damage_sound.play();
     }
 
     // Shot Layers
@@ -250,6 +258,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
                 this.last = time + 150;
                 this._weapon_stress += 10;
                 this._weapon.play('idle', true);
+                this._laser_sound.play();
             }
         }
     }

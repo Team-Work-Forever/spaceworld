@@ -30,6 +30,10 @@ export default class MainScene extends Phaser.Scene {
     private _asteroid_factory: AsteroidFactory = new AsteroidFactory(this);
     private _total_score: number = 0;
 
+    // Sons
+    private _destroy_asteroid: Phaser.Sound.BaseSound;
+    private _destroy_esteves: Phaser.Sound.BaseSound;
+
     constructor() {
         super('main-scene');
     }
@@ -74,6 +78,16 @@ export default class MainScene extends Phaser.Scene {
             frameHeight: 102,
         });
         this.load.image('shield', '../assets/shield.png');
+        this.load.audio('laser-sound', ['../assets/sounds/laser.mp3']);
+        this.load.audio('esteves-damage', [
+            '../assets/sounds/estevesdamage.mp3',
+        ]);
+        this.load.audio('destroy-asteroid', [
+            '../assets/sounds/destroyasteroid.mp3',
+        ]);
+        this.load.audio('esteves-destroy', [
+            '../assets/sounds/estevesdestroy.mp3',
+        ]);
     }
 
     create() {
@@ -94,6 +108,8 @@ export default class MainScene extends Phaser.Scene {
         this._asteroidGroup = new AsteroidGroup(this, 100);
 
         this._player = new Player(this, 200, this.input.mousePointer.y);
+        this._destroy_asteroid = this.sound.add('destroy-asteroid');
+        this._destroy_esteves = this.sound.add('esteves-destroy');
 
         // Setup Timer
         this.timer = this.time.addEvent({
@@ -160,6 +176,8 @@ export default class MainScene extends Phaser.Scene {
                     this.gameover();
                 }
 
+                this._destroy_asteroid.play();
+
                 this.cameras.main.shake(250, 0.005);
             },
             null,
@@ -172,6 +190,7 @@ export default class MainScene extends Phaser.Scene {
             (laser: Laser, astoroid: Asteroid) => {
                 astoroid.destroyAndCollect(true);
                 laser.destroy();
+                this._destroy_asteroid.play();
                 this.cameras.main.shake(250, 0.002);
             },
             null,
@@ -180,6 +199,7 @@ export default class MainScene extends Phaser.Scene {
 
     private gameover() {
         this._player.player_tile.play('destroy');
+        this._destroy_esteves.play();
         this.time.addEvent({
             delay: 1000,
             callback: () => {

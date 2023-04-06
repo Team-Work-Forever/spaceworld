@@ -55,6 +55,16 @@ export default class ScoreScene extends Phaser.Scene {
         const initial_letter_size = 44;
         const decrease_letter_size = 4;
 
+        if (values.length == 0) {
+            this.add
+                .text(width / 2, height / 2, `There is no Points yet`, {
+                    fontFamily: 'Days One',
+                    fontSize: `${initial_letter_size}px`,
+                })
+                .setOrigin(0.5, 0.5);
+            return;
+        }
+
         for (let i = 0; i < this._max_points; i++) {
             this.add
                 .text(
