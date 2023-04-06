@@ -31,6 +31,7 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     private _shield_x: number = 140;
     private _shield_y: number = 10;
     private _is_active_shild: boolean = false;
+    private _weapon_stress_increase: number = 10;
 
     declare body: Phaser.Physics.Arcade.Body;
 
@@ -219,7 +220,9 @@ export default class Player extends Phaser.Physics.Arcade.Group {
     }
 
     // Increment Player life
-    increment_life() {
+    increment_life(lifes?: number) {
+        if (lifes) this._lifes = lifes;
+
         if (this._lifes < player_max_lifes) {
             this._lifes++;
         }
@@ -249,7 +252,9 @@ export default class Player extends Phaser.Physics.Arcade.Group {
                     this.player.y + this._weapon_y - 1,
                 );
                 this.last = time + 150;
-                this._weapon_stress += 10;
+                if (!this.keyboard.noEnergyLostCheat()) {
+                    this._weapon_stress += this._weapon_stress_increase;
+                }
                 this._weapon.play('idle', true);
                 audioManager.playLaserSound();
             }
@@ -290,6 +295,17 @@ export default class Player extends Phaser.Physics.Arcade.Group {
                     this.is_hited = false;
                 },
             });
+        }
+
+        // Cheats
+        if (this.keyboard.fullLifeCheat()) {
+            this.increment_life(player_max_lifes);
+            this.scene.events.emit('displayLifes', this._lifes);
+            return;
+        }
+
+        if (this.keyboard.infintyShield()) {
+            this.attach_shield();
         }
     }
 
