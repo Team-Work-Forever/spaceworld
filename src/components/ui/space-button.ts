@@ -18,7 +18,7 @@ export default class SpaceButton extends Phaser.GameObjects.Container {
 
         const label = scene.add
             .text(0, 0, text, {
-                fontFamily: 'Days One',
+                fontFamily: 'days-gone',
                 fontSize: '25px',
                 color: '#262649',
             })

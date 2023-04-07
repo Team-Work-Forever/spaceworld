@@ -75,7 +75,7 @@ export default class DisplayMenu {
 
         const text_display = scene.add
             .text(-70, 50, 'Level: 1', {
-                fontFamily: 'Days One',
+                fontFamily: 'days-gone',
                 fontSize: '20px',
             })
             .setOrigin(0.5, 0.5);

@@ -38,7 +38,7 @@ export default class GameOverScene extends Phaser.Scene {
         this.add
             .text(width / 2, textHeight, 'Game Over', {
                 fontSize: '80px',
-                fontFamily: 'Days One',
+                fontFamily: 'days-gone',
             })
             .setOrigin(0.5, 0.5);
 
@@ -49,7 +49,7 @@ export default class GameOverScene extends Phaser.Scene {
                 `Score: ${Math.round(data.score).toString()} Points`,
                 {
                     fontSize: '25px',
-                    fontFamily: 'Days One',
+                    fontFamily: 'days-gone',
                 },
             )
             .setOrigin(0.5, 0.5);

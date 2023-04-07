@@ -1,4 +1,6 @@
-.play-button {
-    background: #fff;
-    color: #fff;
+@font-face {
+    font-family: days-gone;
+    src: url('assets/fonts/DaysOne-Regular.ttf');
+    font-weight: 400;
+    font-weight: normal;
 }

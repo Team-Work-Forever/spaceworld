@@ -13,7 +13,7 @@ export default class CrystalContainer extends Phaser.GameObjects.Container {
 
         this._score = scene.add
             .text(0, 0, '0', {
-                fontFamily: 'Days One',
+                fontFamily: 'days-gone',
                 fontSize: '20px',
             })
             .setOrigin(0.85, 0.5);
