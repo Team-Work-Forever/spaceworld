@@ -18,7 +18,7 @@ export default class DisplayBar extends Phaser.GameObjects.Container {
 
         this._text = scene.add
             .text(0, 0, text, {
-                fontFamily: 'days-gone',
+                fontFamily: 'Days One',
                 fontSize: '20px',
             })
             .setOrigin(-0.25, -0.25);

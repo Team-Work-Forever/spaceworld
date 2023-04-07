@@ -25,7 +25,7 @@ export default class StartScene extends Phaser.Scene {
         this.add
             .text(width / 2, textHeigh, 'Space World', {
                 fontSize: '84px',
-                fontFamily: 'days-gone',
+                fontFamily: 'Days One',
             })
             .setOrigin(0.5, 0.5);
 
@@ -33,7 +33,7 @@ export default class StartScene extends Phaser.Scene {
             .text(width / 2, textHeigh + 65, 'Peanuts War', {
                 fontSize: '42px',
                 color: '#FC8F2B',
-                fontFamily: 'days-gone',
+                fontFamily: 'Days One',
             })
             .setOrigin(0.5, 0.5);
 

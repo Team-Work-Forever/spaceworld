@@ -3,13 +3,13 @@ export default class DisplayTitle extends Phaser.GameObjects.Container {
         super(scene);
 
         const title = scene.add.text(0, 0, 'Space World', {
-            fontFamily: 'days-gone',
+            fontFamily: 'Days One',
             fontSize: '64px',
             color: '#ffffff',
         });
 
         const subTitle = scene.add.text(0, 0, 'Peanuts War', {
-            fontFamily: 'days-gone',
+            fontFamily: 'Days One',
             fontSize: '34px',
             color: '#FC8F2B',
         });

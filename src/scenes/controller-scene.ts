@@ -21,7 +21,7 @@ export default class ControllerScene extends Phaser.Scene {
 
         // Controllers
         this.add.text(width / 2 - 150, height / 2 - 85, 'Fire', {
-            fontFamily: 'days-gone',
+            fontFamily: 'Days One',
             fontSize: '34px',
         });
 
@@ -31,7 +31,7 @@ export default class ControllerScene extends Phaser.Scene {
             .setScale(1.5);
 
         this.add.text(width / 2 - 150, height / 2, 'Move', {
-            fontFamily: 'days-gone',
+            fontFamily: 'Days One',
             fontSize: '34px',
         });
 
@@ -44,7 +44,7 @@ export default class ControllerScene extends Phaser.Scene {
         this.add
             .text(width / 2, textHeight, 'Controllers', {
                 fontSize: '80px',
-                fontFamily: 'days-gone',
+                fontFamily: 'Days One',
             })
             .setOrigin(0.5, 0.5);
 

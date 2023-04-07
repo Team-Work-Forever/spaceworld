@@ -190,7 +190,7 @@ export default class MainScene extends Phaser.Scene {
                 const text = this.add
                     .text(width / 2, textHeight, opt[i], {
                         fontSize: '108px',
-                        fontFamily: 'days-gone',
+                        fontFamily: 'Days One',
                     })
                     .setOrigin(0.5, 0.5);
 

@@ -25,7 +25,7 @@ export default class ScoreScene extends Phaser.Scene {
         this.add
             .text(width / 2, textHeight, 'Scores', {
                 fontSize: '80px',
-                fontFamily: 'days-gone',
+                fontFamily: 'Days One',
             })
             .setOrigin(0.5, 0.5);
 
@@ -52,7 +52,7 @@ export default class ScoreScene extends Phaser.Scene {
         if (values.length == 0) {
             this.add
                 .text(width / 2, height / 2, `There is no Points yet`, {
-                    fontFamily: 'days-gone',
+                    fontFamily: 'Days One',
                     fontSize: `${initial_letter_size}px`,
                 })
                 .setOrigin(0.5, 0.5);
@@ -66,7 +66,7 @@ export default class ScoreScene extends Phaser.Scene {
                     height / 2 - 65 + gap * i,
                     `${i + 1}. \t\t\t\b ${values[i]} Points`,
                     {
-                        fontFamily: 'days-gone',
+                        fontFamily: 'Days One',
                         fontSize: `${
                             initial_letter_size - decrease_letter_size * i
                         }px`,
