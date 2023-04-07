@@ -8,7 +8,7 @@ export default class ShieldBar extends DisplayBar {
 
     override renderProgress(
         percent: number,
-        is_enabled: boolean = false,
+        _is_enabled: boolean = false,
         fill_color: number,
     ): void {
         if (percent > 0.4 && percent <= 0.8) {

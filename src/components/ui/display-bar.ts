@@ -57,9 +57,9 @@ export default class DisplayBar extends Phaser.GameObjects.Container {
     }
 
     protected renderProgress(
-        percent?: number,
-        is_enabled?: boolean,
-        fill_color?: number,
+        _percent?: number,
+        _is_enabled?: boolean,
+        _fill_color?: number,
     ) {}
 
     public handleEnergyChanged(value: number, is_not_enabled: boolean = false) {

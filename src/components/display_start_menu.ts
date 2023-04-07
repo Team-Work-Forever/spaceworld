@@ -1,9 +1,4 @@
-import DisplayTitle from './ui/display-title';
-import SpaceButton from './ui/space-button';
-
 export default class DisplayStartMenu extends Phaser.GameObjects.Container {
-    private _container!: Phaser.GameObjects.Container;
-
     constructor(scene: Phaser.Scene, x, y) {
         super(scene, x, y);
 
